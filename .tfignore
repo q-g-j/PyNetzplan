@@ -1,0 +1,9 @@
+.git
+.idea
+.vs
+__pycache__
+build
+dist
+venv
+*.spec
+*.vspscc
