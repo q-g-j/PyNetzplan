@@ -400,18 +400,54 @@ class Mainwindow:
             c = 0
             for vorgang in json_data:
                 temp_list = list()
-                temp_list.append(vorgang['Index'])
-                temp_list.append(vorgang['Beschreibung'])
-                temp_list.append(vorgang['Dauer'])
-                temp_list.append(vorgang['Zeiteinheit'])
-                temp_list.append(vorgang['FAZ'])
-                temp_list.append(vorgang['FEZ'])
-                temp_list.append(vorgang['SAZ'])
-                temp_list.append(vorgang['SEZ'])
-                temp_list.append(vorgang['GP'])
-                temp_list.append(vorgang['FP'])
-                temp_list.append(Common.liste_zu_string(vorgang['Vorgaengerliste']))
-                temp_list.append(Common.liste_zu_string(vorgang['Nachfolgerliste']))
+                try:
+                    temp_list.append(vorgang['Index'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['Beschreibung'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['Dauer'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['Zeiteinheit'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['FAZ'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['FEZ'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['SAZ'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['SEZ'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['GP'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(vorgang['FP'])
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(Common.liste_zu_string(vorgang['Vorgaengerliste']))
+                except KeyError:
+                    temp_list.append("")
+                try:
+                    temp_list.append(Common.liste_zu_string(vorgang['Nachfolgerliste']))
+                except KeyError:
+                    temp_list.append("")
 
                 self.treeview_vorgangsliste.insert(parent='', index=c, text='',
                                                    values=temp_list)
@@ -427,18 +463,64 @@ class Mainwindow:
         if json_datei:
             vorgangsliste = list()
             for item in self.treeview_vorgangsliste.get_children():
-                vorgaenger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][10]))
-                nachfolger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][11]))
-                vorgangsliste.append({'Index': int(self.treeview_vorgangsliste.item(item)['values'][0]),
-                                      'Beschreibung': str(self.treeview_vorgangsliste.item(item)['values'][1]),
-                                      'Dauer': int(self.treeview_vorgangsliste.item(item)['values'][2]),
-                                      'Zeiteinheit': str(self.treeview_vorgangsliste.item(item)['values'][3]),
-                                      'FAZ': int(self.treeview_vorgangsliste.item(item)['values'][4]),
-                                      'FEZ': int(self.treeview_vorgangsliste.item(item)['values'][5]),
-                                      'SAZ': int(self.treeview_vorgangsliste.item(item)['values'][6]),
-                                      'SEZ': int(self.treeview_vorgangsliste.item(item)['values'][7]),
-                                      'GP': int(self.treeview_vorgangsliste.item(item)['values'][8]),
-                                      'FP': int(self.treeview_vorgangsliste.item(item)['values'][9]),
+                try:
+                    index = int(self.treeview_vorgangsliste.item(item)['values'][0])
+                except ValueError:
+                    index = ""
+                try:
+                    beschreibung = int(self.treeview_vorgangsliste.item(item)['values'][1])
+                except ValueError:
+                    beschreibung = ""
+                try:
+                    dauer = int(self.treeview_vorgangsliste.item(item)['values'][2])
+                except ValueError:
+                    dauer = ""
+                try:
+                    zeiteinheit = int(self.treeview_vorgangsliste.item(item)['values'][3])
+                except ValueError:
+                    zeiteinheit = ""
+                try:
+                    faz = int(self.treeview_vorgangsliste.item(item)['values'][4])
+                except ValueError:
+                    faz = ""
+                try:
+                    fez = int(self.treeview_vorgangsliste.item(item)['values'][5])
+                except ValueError:
+                    fez = ""
+                try:
+                    saz = int(self.treeview_vorgangsliste.item(item)['values'][6])
+                except ValueError:
+                    saz = ""
+                try:
+                    sez = int(self.treeview_vorgangsliste.item(item)['values'][7])
+                except ValueError:
+                    sez = ""
+                try:
+                    gp = int(self.treeview_vorgangsliste.item(item)['values'][8])
+                except ValueError:
+                    gp = ""
+                try:
+                    fp = int(self.treeview_vorgangsliste.item(item)['values'][9])
+                except ValueError:
+                    fp = ""
+                try:
+                    vorgaenger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][10]))
+                except ValueError:
+                    vorgaenger_liste = list()
+                try:
+                    nachfolger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][11]))
+                except ValueError:
+                    nachfolger_liste = list()
+                vorgangsliste.append({'Index': index,
+                                      'Beschreibung': beschreibung,
+                                      'Dauer': dauer,
+                                      'Zeiteinheit': zeiteinheit,
+                                      'FAZ': faz,
+                                      'FEZ': fez,
+                                      'SAZ': saz,
+                                      'SEZ': sez,
+                                      'GP': gp,
+                                      'FP': fp,
                                       'Vorgaengerliste': vorgaenger_liste,
                                       'Nachfolgerliste': nachfolger_liste})
 

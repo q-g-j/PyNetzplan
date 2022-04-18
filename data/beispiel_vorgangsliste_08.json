@@ -1,0 +1,152 @@
+[
+        {
+            "Index": 1,
+            "Beschreibung": "",
+            "Dauer": 4,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": []
+        },
+        {
+            "Index": 2,
+            "Beschreibung": "",
+            "Dauer": 3,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 3,
+            "Beschreibung": "",
+            "Dauer": 10,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                2
+            ]
+        },
+        {
+            "Index": 4,
+            "Beschreibung": "",
+            "Dauer": 7,
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 5,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 6,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Vorgaengerliste": [
+                5
+            ]
+        },
+        {
+            "Index": 7,
+            "Beschreibung": "",
+            "Dauer": 5,
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 8,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Vorgaengerliste": [
+                4,
+                10
+            ]
+        },
+        {
+            "Index": 9,
+            "Beschreibung": "",
+            "Dauer": 1,
+            "Vorgaengerliste": [
+                3,
+                6
+            ]
+        },
+        {
+            "Index": 10,
+            "Beschreibung": "",
+            "Dauer": 15,
+            "Vorgaengerliste": [
+                9
+            ]
+        },
+        {
+            "Index": 11,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Vorgaengerliste": [
+                8,
+                17
+            ]
+        },
+        {
+            "Index": 12,
+            "Beschreibung": "",
+            "Dauer": 6,
+            "Vorgaengerliste": [
+                11
+            ]
+        },
+        {
+            "Index": 13,
+            "Beschreibung": "",
+            "Dauer": 3,
+            "Vorgaengerliste": [
+                12
+            ]
+        },
+        {
+            "Index": 14,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Vorgaengerliste": [
+                12
+            ]
+        },
+        {
+            "Index": 15,
+            "Beschreibung": "",
+            "Dauer": 1,
+            "Vorgaengerliste": [
+                12
+            ]
+        },
+        {
+            "Index": 16,
+            "Beschreibung": "",
+            "Dauer": 4,
+            "Vorgaengerliste": [
+                13,
+                14,
+                15
+            ]
+        },
+        {
+            "Index": 17,
+            "Beschreibung": "",
+            "Dauer": 5,
+            "Vorgaengerliste": [
+                7
+            ]
+        },
+        {
+            "Index": 18,
+            "Beschreibung": "",
+            "Dauer": 1,
+            "Vorgaengerliste": [
+                16
+            ]
+        }
+    ]

@@ -1,0 +1,234 @@
+[
+        {
+            "Index": 1,
+            "Beschreibung": "",
+            "Dauer": 10,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                8
+            ]
+        },
+        {
+            "Index": 2,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                12,
+                23
+            ]
+        },
+        {
+            "Index": 3,
+            "Beschreibung": "",
+            "Dauer": 7,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                5
+            ]
+        },
+        {
+            "Index": 4,
+            "Beschreibung": "",
+            "Dauer": 22,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                3
+            ]
+        },
+        {
+            "Index": 5,
+            "Beschreibung": "",
+            "Dauer": 3,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": []
+        },
+        {
+            "Index": 6,
+            "Beschreibung": "",
+            "Dauer": 20,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                3
+            ]
+        },
+        {
+            "Index": 7,
+            "Beschreibung": "",
+            "Dauer": 8,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                8
+            ]
+        },
+        {
+            "Index": 8,
+            "Beschreibung": "",
+            "Dauer": 14,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                5
+            ]
+        },
+        {
+            "Index": 9,
+            "Beschreibung": "",
+            "Dauer": 6,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                2
+            ]
+        },
+        {
+            "Index": 10,
+            "Beschreibung": "",
+            "Dauer": 18,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 11,
+            "Beschreibung": "",
+            "Dauer": 6,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                1
+            ]
+        },
+        {
+            "Index": 12,
+            "Beschreibung": "",
+            "Dauer": 16,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                5
+            ]
+        },
+        {
+            "Index": 13,
+            "Beschreibung": "",
+            "Dauer": 5,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                4
+            ]
+        },
+        {
+            "Index": 14,
+            "Beschreibung": "",
+            "Dauer": 4,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                6
+            ]
+        },
+        {
+            "Index": 15,
+            "Beschreibung": "",
+            "Dauer": 7,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                13,
+                14
+            ]
+        },
+        {
+            "Index": 16,
+            "Beschreibung": "",
+            "Dauer": 14,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                7,
+                11
+            ]
+        },
+        {
+            "Index": 17,
+            "Beschreibung": "",
+            "Dauer": 9,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                11
+            ]
+        },
+        {
+            "Index": 18,
+            "Beschreibung": "",
+            "Dauer": 10,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                15,
+                16,
+                17
+            ]
+        },
+        {
+            "Index": 19,
+            "Beschreibung": "",
+            "Dauer": 4,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                24
+            ]
+        },
+        {
+            "Index": 20,
+            "Beschreibung": "",
+            "Dauer": 8,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                24
+            ]
+        },
+        {
+            "Index": 21,
+            "Beschreibung": "",
+            "Dauer": 7,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                9,
+                19,
+                20
+            ]
+        },
+        {
+            "Index": 22,
+            "Beschreibung": "",
+            "Dauer": 2,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                10,
+                18,
+                21
+            ]
+        },
+        {
+            "Index": 23,
+            "Beschreibung": "",
+            "Dauer": 19,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                5
+            ]
+        },
+        {
+            "Index": 24,
+            "Beschreibung": "",
+            "Dauer": 5,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                25
+            ]
+        },
+        {
+            "Index": 25,
+            "Beschreibung": "",
+            "Dauer": 11,
+            "Zeiteinheit": "Tage",
+            "Vorgaengerliste": [
+                5
+            ]
+        }
+    ]
