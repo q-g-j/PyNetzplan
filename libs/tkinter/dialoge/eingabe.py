@@ -8,15 +8,17 @@ from libs.tkinter.fonts import Fonts
 
 
 class EingabeDialoge:
-    def __init__(self, _root):
+    def __init__(self, _root, _mainwindow, _treeview_vorgangsliste):
         self.__root = _root
+        self.__mainwindow = _mainwindow
+        self.__treeview_vorgangsliste = _treeview_vorgangsliste
         self.__textbox_index = None
         self.__textbox_beschreibung = None
         self.__textbox_dauer = None
         self.__textbox_zeiteiheit = None
         self.__textbox_vorgaenger = None
 
-    def neuer_vorgang(self, mainwindow):
+    def neuer_vorgang(self):
         fonts = Fonts()
         toplevel = tk.Toplevel(self.__root)
         toplevel.resizable(width=False, height=False)
@@ -108,7 +110,7 @@ class EingabeDialoge:
             style="Normal.TButton",
             text="OK",
             width=12,
-            command=lambda t=toplevel, r=mainwindow: self.__button_ok_neuer_vorgang_action(t, r)
+            command=lambda t=toplevel: self.__button_ok_neuer_vorgang_action(t)
         )
         button_abbrechen = ttk.Button(
             frame,
@@ -145,14 +147,14 @@ class EingabeDialoge:
             lambda event, button=button_abbrechen: TkCommon.leave_button(event, button)
             )
 
-        if len(mainwindow.treeview_vorgangsliste.get_children()) != 0:
-            zeiteinheit = (str(mainwindow.treeview_vorgangsliste.item(
-                mainwindow.treeview_vorgangsliste.get_children()[0])["values"][3]))
+        if len(self.__treeview_vorgangsliste.get_children()) != 0:
+            zeiteinheit = (str(self.__treeview_vorgangsliste.item(
+                self.__treeview_vorgangsliste.get_children()[0])["values"][3]))
             self.__textbox_zeiteiheit.insert("1.0", zeiteinheit)
 
         TkCommon.center(toplevel)
 
-    def bearbeite_vorgang(self, mainwindow, aktives_element):
+    def bearbeite_vorgang(self, aktives_element):
         fonts = Fonts()
         toplevel = tk.Toplevel(self.__root)
         toplevel.resizable(width=False, height=False)
@@ -169,7 +171,7 @@ class EingabeDialoge:
 
         label_index_text = ttk.Label(
             toplevel,
-            text=str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][0]),
+            text=str(self.__treeview_vorgangsliste.item(aktives_element)["values"][0]),
             font=fonts.font_main
         )
         self.__textbox_beschreibung = tk.Text(
@@ -238,8 +240,8 @@ class EingabeDialoge:
             style="Normal.TButton",
             text="OK",
             width=12,
-            command=lambda t=toplevel, r=mainwindow, a=aktives_element: self.__button_ok_bearbeite_vorgang_action(
-                t, r, a)
+            command=lambda t=toplevel, a=aktives_element: self.__button_ok_bearbeite_vorgang_action(
+                t, a)
         )
         button_abbrechen = ttk.Button(
             frame,
@@ -276,10 +278,10 @@ class EingabeDialoge:
             )
 
         if aktives_element:
-            beschreibung = str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][1])
-            dauer = str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][2])
-            zeiteinheit = str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][3])
-            vorgaenger = str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][10])
+            beschreibung = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][1])
+            dauer = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][2])
+            zeiteinheit = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][3])
+            vorgaenger = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][10])
             self.__textbox_beschreibung.insert("1.0", beschreibung)
             self.__textbox_dauer.insert("1.0", dauer)
             self.__textbox_zeiteiheit.insert("1.0", zeiteinheit)
@@ -287,7 +289,7 @@ class EingabeDialoge:
 
         TkCommon.center(toplevel)
 
-    def __button_ok_neuer_vorgang_action(self, toplevel, mainwindow):
+    def __button_ok_neuer_vorgang_action(self, toplevel):
         vorgaenger_liste = []
         try:
             index = self.__textbox_index.get("1.0", 'end-1c').strip("\n")
@@ -302,13 +304,13 @@ class EingabeDialoge:
             pass
         else:
             if index != "" and dauer != "":
-                mainwindow.neuer_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
-                                         vorgaenger_liste)
+                self.__mainwindow.neuer_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
+                                                vorgaenger_liste)
 
-    def __button_ok_bearbeite_vorgang_action(self, toplevel, mainwindow, aktives_element):
+    def __button_ok_bearbeite_vorgang_action(self, toplevel, aktives_element):
         vorgaenger_liste = []
         try:
-            index = str(mainwindow.treeview_vorgangsliste.item(aktives_element)["values"][0])
+            index = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][0])
             beschreibung = self.__textbox_beschreibung.get("1.0", 'end-1c').strip("\n")
             dauer = self.__textbox_dauer.get("1.0", 'end-1c').strip("\n")
             zeiteinheit = self.__textbox_zeiteiheit.get("1.0", 'end-1c').strip("\n")
@@ -320,8 +322,8 @@ class EingabeDialoge:
             pass
         else:
             if index != "" and dauer != "":
-                mainwindow.editiere_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
-                                            vorgaenger_liste, aktives_element)
+                self.__mainwindow.bearbeite_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
+                                                    vorgaenger_liste, aktives_element)
 
     @staticmethod
     def __button_abbrechen_action(toplevel):

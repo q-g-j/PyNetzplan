@@ -65,6 +65,7 @@ class FehlerDialoge:
             "<Leave>",
             lambda event, button=button_ok: TkCommon.leave_button(event, button)
             )
+
     @staticmethod
     def __button_ok_action(toplevel):
         toplevel.destroy()
