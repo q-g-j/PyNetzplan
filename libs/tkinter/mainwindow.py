@@ -465,51 +465,51 @@ class Mainwindow:
             for item in self.treeview_vorgangsliste.get_children():
                 try:
                     index = int(self.treeview_vorgangsliste.item(item)['values'][0])
-                except ValueError:
+                except (ValueError, IndexError):
                     index = ""
                 try:
                     beschreibung = int(self.treeview_vorgangsliste.item(item)['values'][1])
-                except ValueError:
+                except (ValueError, IndexError):
                     beschreibung = ""
                 try:
                     dauer = int(self.treeview_vorgangsliste.item(item)['values'][2])
-                except ValueError:
+                except (ValueError, IndexError):
                     dauer = ""
                 try:
                     zeiteinheit = int(self.treeview_vorgangsliste.item(item)['values'][3])
-                except ValueError:
+                except (ValueError, IndexError):
                     zeiteinheit = ""
                 try:
                     faz = int(self.treeview_vorgangsliste.item(item)['values'][4])
-                except ValueError:
+                except (ValueError, IndexError):
                     faz = ""
                 try:
                     fez = int(self.treeview_vorgangsliste.item(item)['values'][5])
-                except ValueError:
+                except (ValueError, IndexError):
                     fez = ""
                 try:
                     saz = int(self.treeview_vorgangsliste.item(item)['values'][6])
-                except ValueError:
+                except (ValueError, IndexError):
                     saz = ""
                 try:
                     sez = int(self.treeview_vorgangsliste.item(item)['values'][7])
-                except ValueError:
+                except (ValueError, IndexError):
                     sez = ""
                 try:
                     gp = int(self.treeview_vorgangsliste.item(item)['values'][8])
-                except ValueError:
+                except (ValueError, IndexError):
                     gp = ""
                 try:
                     fp = int(self.treeview_vorgangsliste.item(item)['values'][9])
-                except ValueError:
+                except (ValueError, IndexError):
                     fp = ""
                 try:
                     vorgaenger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][10]))
-                except ValueError:
+                except (ValueError, IndexError):
                     vorgaenger_liste = list()
                 try:
                     nachfolger_liste = Common.string_zu_liste(str(self.treeview_vorgangsliste.item(item)['values'][11]))
-                except ValueError:
+                except (ValueError, IndexError):
                     nachfolger_liste = list()
                 vorgangsliste.append({'Index': index,
                                       'Beschreibung': beschreibung,

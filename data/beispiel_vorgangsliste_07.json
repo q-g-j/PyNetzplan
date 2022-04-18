@@ -1,121 +1,212 @@
 [
-        {
-            "Index": 1,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": []
-        },
-        {
-            "Index": 2,
-            "Beschreibung": "",
-            "Dauer": 9,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                1
-            ]
-        },
-        {
-            "Index": 3,
-            "Beschreibung": "",
-            "Dauer": 8,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                1
-            ]
-        },
-        {
-            "Index": 4,
-            "Beschreibung": "",
-            "Dauer": 5,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                1
-            ]
-        },
-        {
-            "Index": 5,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                2
-            ]
-        },
-        {
-            "Index": 6,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                2
-            ]
-        },
-        {
-            "Index": 7,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                3
-            ]
-        },
-        {
-            "Index": 8,
-            "Beschreibung": "",
-            "Dauer": 6,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                4,
-                6,
-                7
-            ]
-        },
-        {
-            "Index": 9,
-            "Beschreibung": "",
-            "Dauer": 2,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                5,
-                8
-            ]
-        },
-        {
-            "Index": 10,
-            "Beschreibung": "",
-            "Dauer": 3,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                9
-            ]
-        },
-        {
-            "Index": 11,
-            "Beschreibung": "",
-            "Dauer": 2,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                9
-            ]
-        },
-        {
-            "Index": 12,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                10,
-                11
-            ]
-        },
-        {
-            "Index": 13,
-            "Beschreibung": "",
-            "Dauer": 1,
-            "Zeiteinheit": "Tage",
-            "Vorgaengerliste": [
-                12
-            ]
-        }
-    ]
+    {
+        "Index": 1,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 2,
+        "Beschreibung": "",
+        "Dauer": 9,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            1
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 3,
+        "Beschreibung": "",
+        "Dauer": 8,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            1
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 4,
+        "Beschreibung": "",
+        "Dauer": 5,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            1
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 5,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            2
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 6,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            2
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 7,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            3
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 8,
+        "Beschreibung": "",
+        "Dauer": 6,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            4,
+            6,
+            7
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 9,
+        "Beschreibung": "",
+        "Dauer": 2,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            5,
+            8
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 10,
+        "Beschreibung": "",
+        "Dauer": 3,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            9
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 11,
+        "Beschreibung": "",
+        "Dauer": 2,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            9
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 12,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            10,
+            11
+        ],
+        "Nachfolgerliste": []
+    },
+    {
+        "Index": 13,
+        "Beschreibung": "",
+        "Dauer": 1,
+        "Zeiteinheit": "",
+        "FAZ": "",
+        "FEZ": "",
+        "SAZ": "",
+        "SEZ": "",
+        "GP": "",
+        "FP": "",
+        "Vorgaengerliste": [
+            12
+        ],
+        "Nachfolgerliste": []
+    }
+]
