@@ -159,7 +159,7 @@ class EingabeDialoge:
         toplevel.wm_transient(self.__root)
         toplevel.grab_set()
         toplevel.config(padx=2, pady=2)
-        toplevel.title("Vorgang hinzufügen")
+        toplevel.title("Vorgang bearbeiten")
 
         label_index = ttk.Label(toplevel, text="Index:", font=fonts.font_main)
         label_beschreibung = ttk.Label(toplevel, text="Beschreibung:", font=fonts.font_main)

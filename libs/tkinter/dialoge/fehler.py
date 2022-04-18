@@ -13,7 +13,7 @@ class FehlerDialoge:
 
     def vorgaenger_rekursions_fehler(self, rekursionsfehler_liste):
         fonts = Fonts()
-        toplevel = tk.Toplevel(self.__root)
+        toplevel = tk.Toplevel(self.__root, width=80)
         toplevel.resizable(width=False, height=False)
         toplevel.wm_transient(self.__root)
         toplevel.grab_set()
@@ -49,4 +49,22 @@ class FehlerDialoge:
             else:
                 row += 1
 
+        label_leer = ttk.Label(toplevel, text=" ")
+        label_leer.grid(column=0, row=toplevel.grid_size()[1] + 1, padx=2, pady=2, sticky="w")
+        button_ok = ttk.Button(toplevel, text="OK", width=20,
+                               command=lambda t=toplevel: self.__button_ok_action(t))
+        button_ok.grid(column=0, columnspan=2, row=toplevel.grid_size()[1] + 1, padx=2, pady=2)
+
         TkCommon.center(toplevel)
+
+        button_ok.bind(
+            "<Enter>",
+            lambda event, button=button_ok: TkCommon.hover_button(event, button)
+            )
+        button_ok.bind(
+            "<Leave>",
+            lambda event, button=button_ok: TkCommon.leave_button(event, button)
+            )
+    @staticmethod
+    def __button_ok_action(toplevel):
+        toplevel.destroy()
