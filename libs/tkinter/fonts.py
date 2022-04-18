@@ -34,23 +34,38 @@ class Fonts:
                 "bold"
             )
         else:
+            self.font_title = (
+                "Selawik",
+                13,
+                "bold"
+            )
             self.font_header = (
                 "Selawik",
-                12,
+                13,
                 "normal"
             )
             self.font_main = (
                 "Selawik",
+                11,
+                "normal"
+            )
+            self.font_eingabe = (
+                "Selawik",
+                11,
+                "normal"
+            )
+            self.font_menu = (
+                "Selawik",
                 10,
+                "normal"
+            )
+            self.font_table = (
+                "Selawik",
+                12,
                 "normal"
             )
             self.font_block = (
                 "JetBrains Mono Regular",
                 10,
                 "normal"
-            )
-            self.font_title = (
-                "Selawik",
-                12,
-                "bold"
             )

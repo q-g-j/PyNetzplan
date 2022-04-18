@@ -18,17 +18,17 @@ class Menuleiste:
         menuleiste = tk.Menu(self.__root)
         dateimenu = tk.Menu(menuleiste)
 
-        dateimenu.add_command(label="Neue Vorgangsliste", font=self.__fonts.font_main,
+        dateimenu.add_command(label="Neue Vorgangsliste", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_neu_action)
-        dateimenu.add_command(label="Öffnen ...", font=self.__fonts.font_main,
+        dateimenu.add_command(label="Öffnen ...", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_oeffne_action)
-        # dateimenu.add_command(label="Speichern", font=self.__fonts.font_main)
-        dateimenu.add_command(label="Speichern als ...", font=self.__fonts.font_main,
+        # dateimenu.add_command(label="Speichern", font=self.__fonts.font_menu)
+        dateimenu.add_command(label="Speichern als ...", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_speichern_als_action)
-        dateimenu.add_command(label="Beenden", font=self.__fonts.font_main,
+        dateimenu.add_command(label="Beenden", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_beenden_action)
 
-        menuleiste.add_cascade(label="Datei", menu=dateimenu, font=self.__fonts.font_main)
+        menuleiste.add_cascade(label="Datei", menu=dateimenu)
 
         self.__root.config(menu=menuleiste)
 

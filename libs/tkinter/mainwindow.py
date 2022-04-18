@@ -312,7 +312,7 @@ class Mainwindow:
 
     def __erstelle_vorgangslisten_tabelle(self):
         self.__treeview_vorgangsliste = ttk.Treeview(self.__root, show='headings',
-                                                     height=20, style="Header.Treeview")
+                                                     height=25, style="Header.Treeview")
 
         self.__treeview_vorgangsliste['columns'] = (
             'Index',
@@ -340,8 +340,8 @@ class Mainwindow:
         self.__treeview_vorgangsliste.column("SEZ", anchor="e", width=50)
         self.__treeview_vorgangsliste.column("GP", anchor="e", width=50)
         self.__treeview_vorgangsliste.column("FP", anchor="e", width=50)
-        self.__treeview_vorgangsliste.column("Vorgänger", anchor="w", width=160)
-        self.__treeview_vorgangsliste.column("Nachfolger", anchor="w", width=160)
+        self.__treeview_vorgangsliste.column("Vorgänger", anchor="w", width=200)
+        self.__treeview_vorgangsliste.column("Nachfolger", anchor="w", width=200)
 
         self.__treeview_vorgangsliste.heading("#0", text="", anchor="center")
         self.__treeview_vorgangsliste.heading("Index", text="Index", anchor="center")
