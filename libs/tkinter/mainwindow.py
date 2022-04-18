@@ -528,6 +528,6 @@ class Mainwindow:
 
             json_datei.write(json_data)
 
-    @staticmethod
-    def __menuleiste_dateimenu_beenden_action():
+    def __menuleiste_dateimenu_beenden_action(self):
+        self.__root.destroy()
         quit()
