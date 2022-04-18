@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 from libs.common import Common
+from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.fonts import Fonts
 
 
@@ -17,6 +18,7 @@ class Menuleiste:
     def erstelle_menuleiste(self):
         menuleiste = tk.Menu(self.__root)
         dateimenu = tk.Menu(menuleiste)
+        darstellungsmenu = tk.Menu(menuleiste)
 
         dateimenu.add_command(label="Neue Vorgangsliste", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_neu_action)
@@ -28,9 +30,21 @@ class Menuleiste:
         dateimenu.add_command(label="Beenden", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_beenden_action)
 
+        darstellungsmenu.add_command(label="Light-Modus", font=self.__fonts.font_menu,
+                                     command=self.__menuleiste_darstellungsmenu_lightmode_action)
+        darstellungsmenu.add_command(label="Dark-Modus", font=self.__fonts.font_menu,
+                                     command=self.__menuleiste_darstellungsmenu_darkmode_action)
+
         menuleiste.add_cascade(label="Datei", menu=dateimenu)
+        # menuleiste.add_cascade(label="Darstellung", menu=darstellungsmenu)
 
         self.__root.config(menu=menuleiste)
+
+    def __menuleiste_darstellungsmenu_lightmode_action(self):
+        self.__root.tk.call("set_theme", "light")
+
+    def __menuleiste_darstellungsmenu_darkmode_action(self):
+        self.__root.tk.call("set_theme", "dark")
 
     def __menuleiste_dateimenu_neu_action(self):
         for i in self.__treeview_vorgangsliste.get_children():
