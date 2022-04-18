@@ -110,7 +110,11 @@ class Menuleiste:
                 except KeyError:
                     temp_list.append("")
 
-                self.__treeview_vorgangsliste.insert(parent='', index=c, text='', values=temp_list)
+                if len(self.__treeview_vorgangsliste.get_children()) % 2 != 0:
+                    self.__treeview_vorgangsliste.insert(parent='', index=c, text='', values=temp_list,
+                                                         tags=('odd_row',))
+                else:
+                    self.__treeview_vorgangsliste.insert(parent='', index=c, text='', values=temp_list)
                 c += 1
 
     def __menuleiste_dateimenu_speichern_action(self):

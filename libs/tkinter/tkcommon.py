@@ -37,6 +37,10 @@ class TkCommon:
             "TCheckbutton",
             font=fonts.font_main
         )
+        style.configure(
+            'Treeview',
+            rowheight=24
+        )
 
     @staticmethod
     def center(win):

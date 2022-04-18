@@ -68,7 +68,11 @@ class Mainwindow:
                 temp_list.append(Common.liste_zu_string(vorgaenger_liste))
             else:
                 temp_list.append("")
-        self.__treeview_vorgangsliste.insert(parent='', index=index - 1, text='', values=temp_list)
+        if self.__vorgangelisten_tabelle_anzahl_eintraege() % 2 != 0:
+            self.__treeview_vorgangsliste.insert(parent='', index=index - 1, text='', values=temp_list,
+                                                 tags=('odd_row',))
+        else:
+            self.__treeview_vorgangsliste.insert(parent='', index=index - 1, text='', values=temp_list)
 
         # schließe den Dialog:
         dialog.destroy()
@@ -313,6 +317,9 @@ class Mainwindow:
     def __erstelle_vorgangslisten_tabelle(self):
         self.__treeview_vorgangsliste = ttk.Treeview(self.__root, show='headings',
                                                      height=25, style="Header.Treeview")
+
+        # self.__treeview_vorgangsliste.tag_configure('even_row', background='orange')
+        self.__treeview_vorgangsliste.tag_configure('odd_row', background='#40403e')
 
         self.__treeview_vorgangsliste['columns'] = (
             'Index',
