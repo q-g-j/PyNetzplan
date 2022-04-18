@@ -248,7 +248,7 @@ namespace eval ttk::theme::sun-valley-dark {
         ttk::style configure Accent.TButton -padding {8 4} -anchor center -foreground #000000
 
         ttk::style map Accent.TButton -foreground \
-            [list pressed #25536a \
+            [list pressed #8a5d2d \
                 disabled #a5a5a5]
 
         ttk::style element create AccentButton.button image \
@@ -511,7 +511,7 @@ namespace eval ttk::theme::sun-valley-dark {
 
         ttk::style configure Treeview -background $colors(-bg) -rowheight [expr {[font metrics font -linespace] + 2}]
         ttk::style map Treeview \
-            -background [list selected #292929] \
+            -background [list selected #25536a] \
             -foreground [list selected $colors(-selectfg)]
 
         # Panedwindow
