@@ -26,9 +26,8 @@ class Mainwindow:
 
         self.__frame_vorgangstabelle = ttk.Frame(self.__root)
         self.__frame_mainwindow_buttons = ttk.Frame(self.__root)
+        self.__frame_mainwindow_buttons.pack(side=tk.BOTTOM, fill=tk.X, expand=False)
         self.__frame_vorgangstabelle.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self.__frame_mainwindow_buttons.pack(side=tk.BOTTOM, fill=tk.X)
-
         self.__vorgangstabelle = Vorgangstabelle(self.__frame_vorgangstabelle)
         self.__vorgangstabelle.erstelle_vorgangslisten_tabelle()
 
@@ -120,8 +119,8 @@ class Mainwindow:
     def __erstelle_mainwindow_buttons(self):
         button_frame_left = tk.Frame(self.__frame_mainwindow_buttons)
         button_frame_right = tk.Frame(self.__frame_mainwindow_buttons)
-        button_frame_left.pack(side=tk.TOP, anchor='nw', padx=2, pady=2)
-        button_frame_right.pack(side=tk.RIGHT, padx=2, pady=2)
+        button_frame_left.pack(side=tk.TOP, anchor='nw', padx=2, pady=2, fill=tk.Y, expand=False)
+        button_frame_right.pack(side=tk.RIGHT, padx=2, pady=2, fill=tk.Y, expand=False)
 
         button_neuer_vorgang = ttk.Button(
             button_frame_left,

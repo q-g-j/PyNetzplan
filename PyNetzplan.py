@@ -11,6 +11,7 @@ root = tk.Tk()
 root.title("PyNetzplan")
 
 root.geometry("1330x800")
+root.minsize(600, 400)
 
 Common.set_script_path()
 
