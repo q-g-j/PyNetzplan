@@ -21,7 +21,7 @@ class Vorgangstabelle:
         # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewClose>>', self.cb)
 
         self.vorgangslisten_tabelle['columns'] = (
-            'Index',
+            'Nummer',
             'Beschreibung',
             'Dauer',
             'Zeiteinheit',
@@ -36,21 +36,21 @@ class Vorgangstabelle:
         )
 
         self.vorgangslisten_tabelle.column("#0", width=0, stretch=False)
-        self.vorgangslisten_tabelle.column("Index", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("Beschreibung", anchor="w", width=300)
-        self.vorgangslisten_tabelle.column("Dauer", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("Zeiteinheit", anchor="w", width=100)
-        self.vorgangslisten_tabelle.column("FAZ", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("FEZ", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("SAZ", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("SEZ", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("GP", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("FP", anchor="e", width=50)
-        self.vorgangslisten_tabelle.column("Vorgänger", anchor="w", width=200)
-        self.vorgangslisten_tabelle.column("Nachfolger", anchor="w", width=200)
+        self.vorgangslisten_tabelle.column("Nummer", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("Beschreibung", anchor="w", minwidth=300, stretch=True)
+        self.vorgangslisten_tabelle.column("Dauer", anchor="e", width=70, stretch=False)
+        self.vorgangslisten_tabelle.column("Zeiteinheit", anchor="w", width=120, stretch=False)
+        self.vorgangslisten_tabelle.column("FAZ", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("FEZ", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("SAZ", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("SEZ", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("GP", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("FP", anchor="e", width=50, stretch=False)
+        self.vorgangslisten_tabelle.column("Vorgänger", anchor="w", minwidth=240, stretch=True)
+        self.vorgangslisten_tabelle.column("Nachfolger", anchor="w", minwidth=240, stretch=True)
 
         self.vorgangslisten_tabelle.heading("#0", text="", anchor="center")
-        self.vorgangslisten_tabelle.heading("Index", text="Index", anchor="center")
+        self.vorgangslisten_tabelle.heading("Nummer", text="Nr.", anchor="center")
         self.vorgangslisten_tabelle.heading("Beschreibung", text="Beschreibung", anchor="center")
         self.vorgangslisten_tabelle.heading("Dauer", text="Dauer", anchor="center")
         self.vorgangslisten_tabelle.heading("Zeiteinheit", text="Zeiteinheit", anchor="center")
@@ -63,11 +63,16 @@ class Vorgangstabelle:
         self.vorgangslisten_tabelle.heading("Vorgänger", text="Vorgänger", anchor="center")
         self.vorgangslisten_tabelle.heading("Nachfolger", text="Nachfolger", anchor="center")
 
-        self.vorgangslisten_tabelle.grid(column=0, row=0)
+        self.vorgangslisten_tabelle.grid(column=0, columnspan=12, row=0, sticky="nsew")
+        self.__root.rowconfigure(0, weight=1)
+        self.__root.columnconfigure(0, weight=1)
 
-        scrollbar = ttk.Scrollbar(self.__root, orient="vertical", command=self.vorgangslisten_tabelle.yview)
-        self.vorgangslisten_tabelle.configure(yscrollcommand=scrollbar.set)
-        scrollbar.grid(column=12, row=0, sticky="ns")
+        scrollbar_x = ttk.Scrollbar(self.__root, orient="horizontal", command=self.vorgangslisten_tabelle.xview)
+        scrollbar_y = ttk.Scrollbar(self.__root, orient="vertical", command=self.vorgangslisten_tabelle.yview)
+        self.vorgangslisten_tabelle.configure(xscrollcommand=scrollbar_x.set)
+        self.vorgangslisten_tabelle.configure(yscrollcommand=scrollbar_y.set)
+        scrollbar_x.grid(column=0, row=1, sticky="we")
+        scrollbar_y.grid(column=1, row=0, sticky="ns")
 
     def vorgangslisten_tabelle_verschiebe_nach_links(self, ab_index):
         verschoben_index_liste = []

@@ -10,6 +10,7 @@ from libs.tkinter.fonts import Fonts
 from libs.tkinter.menuleiste import Menuleiste
 from libs.tkinter.vorgangstabelle import Vorgangstabelle
 from libs.tkinter.tkcommon import TkCommon
+from libs.tkinter.style import Style
 from libs.tkinter.dialoge.eingabe import EingabeDialoge
 from libs.tkinter.dialoge.fehler import FehlerDialoge
 
@@ -18,11 +19,17 @@ class Mainwindow:
     def __init__(self, _root):
         self.__root = _root
 
-        TkCommon.set_theme(self.__root)
-        TkCommon.set_styles()
+        Style.set_theme(self.__root)
+        Style.set_styles()
 
         self.__vorgangsliste = []
-        self.__vorgangstabelle = Vorgangstabelle(self.__root)
+
+        self.__frame_vorgangstabelle = ttk.Frame(self.__root)
+        self.__frame_mainwindow_buttons = ttk.Frame(self.__root)
+        self.__frame_vorgangstabelle.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.__frame_mainwindow_buttons.pack(side=tk.BOTTOM, fill=tk.X)
+
+        self.__vorgangstabelle = Vorgangstabelle(self.__frame_vorgangstabelle)
         self.__vorgangstabelle.erstelle_vorgangslisten_tabelle()
 
         self.__fonts = Fonts()
@@ -111,10 +118,10 @@ class Mainwindow:
         dialog.destroy()
 
     def __erstelle_mainwindow_buttons(self):
-        button_frame_left = tk.Frame(self.__root)
-        button_frame_right = tk.Frame(self.__root)
-        button_frame_left.grid(column=0, row=1, columnspan=13, padx=2, pady=2, sticky="w")
-        button_frame_right.grid(column=0, row=2, columnspan=13, padx=2, pady=2, sticky="e")
+        button_frame_left = tk.Frame(self.__frame_mainwindow_buttons)
+        button_frame_right = tk.Frame(self.__frame_mainwindow_buttons)
+        button_frame_left.pack(side=tk.TOP, anchor='nw', padx=2, pady=2)
+        button_frame_right.pack(side=tk.RIGHT, padx=2, pady=2)
 
         button_neuer_vorgang = ttk.Button(
             button_frame_left,

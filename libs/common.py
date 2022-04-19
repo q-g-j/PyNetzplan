@@ -30,5 +30,5 @@ class Common:
             if i == len(liste) - 1:
                 vorgaenger_liste_string += str(liste[i])
             else:
-                vorgaenger_liste_string += str(liste[i]) + ", "
+                vorgaenger_liste_string += str(liste[i]) + ","
         return vorgaenger_liste_string
