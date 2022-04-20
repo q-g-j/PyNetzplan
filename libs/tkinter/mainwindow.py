@@ -49,13 +49,15 @@ class Mainwindow:
                 break
 
         # Setze die Werte aller Vorgänge zurück
-        # (außer: Index, Beschreibung, Dauer, Zeiteinheit, Vorgängerliste):
+        # (außer: Index, Beschreibung, Dauer, Vorgängerliste):
         for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
             values = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values']
             temp_list = list()
             for i in range(len(values)):
                 if i not in (0, 1, 2, 3, 10):
                     temp_list.append("")
+                elif i == 3:
+                    temp_list.append(zeiteinheit)
                 else:
                     temp_list.append(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][i])
             self.__vorgangstabelle.vorgangslisten_tabelle.item(item, values=temp_list)

@@ -288,7 +288,7 @@ class EingabeDialoge:
         self.__textbox_dauer.bind("<Return>", lambda e: "break")
         self.__textbox_zeiteinheit.bind("<Return>", lambda e: "break")
         self.__textbox_vorgaenger.bind("<Return>", lambda e: "break")
-        
+
         if aktives_element:
             beschreibung = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][1])
             dauer = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][2])
