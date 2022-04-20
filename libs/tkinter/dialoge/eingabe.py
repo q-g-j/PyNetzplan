@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from libs.common import Common
 from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.fonts import Fonts
 
@@ -15,7 +16,7 @@ class EingabeDialoge:
         self.__textbox_index = None
         self.__textbox_beschreibung = None
         self.__textbox_dauer = None
-        self.__textbox_zeiteinheit = None
+        self.__textbox_zeiteiheit = None
         self.__textbox_vorgaenger = None
 
     def neuer_vorgang(self):
@@ -66,7 +67,7 @@ class EingabeDialoge:
             padx=2,
             pady=2
         )
-        self.__textbox_zeiteinheit = tk.Text(
+        self.__textbox_zeiteiheit = tk.Text(
             toplevel,
             font=fonts.font_block,
             height=0,
@@ -98,7 +99,7 @@ class EingabeDialoge:
         self.__textbox_index.grid(column=1, row=0, sticky="w", padx=2, pady=2)
         self.__textbox_beschreibung.grid(column=1, row=1, sticky="w", padx=2, pady=2)
         self.__textbox_dauer.grid(column=1, row=2, sticky="w", padx=2, pady=2)
-        self.__textbox_zeiteinheit.grid(column=1, row=3, sticky="w", padx=2, pady=2)
+        self.__textbox_zeiteiheit.grid(column=1, row=3, sticky="w", padx=2, pady=2)
         self.__textbox_vorgaenger.grid(column=1, row=4, sticky="w", padx=2, pady=2)
 
         frame = tk.Frame(toplevel)
@@ -126,7 +127,7 @@ class EingabeDialoge:
         self.__textbox_index.bind("<Tab>", TkCommon.tab_pressed)
         self.__textbox_beschreibung.bind("<Tab>", TkCommon.tab_pressed)
         self.__textbox_dauer.bind("<Tab>", TkCommon.tab_pressed)
-        self.__textbox_zeiteinheit.bind("<Tab>", TkCommon.tab_pressed)
+        self.__textbox_zeiteiheit.bind("<Tab>", TkCommon.tab_pressed)
         self.__textbox_vorgaenger.bind("<Tab>", TkCommon.tab_pressed)
 
         button_ok.bind(
@@ -147,16 +148,10 @@ class EingabeDialoge:
             lambda event, button=button_abbrechen: TkCommon.leave_button(event, button)
             )
 
-        self.__textbox_index.bind("<Return>", lambda e: "break")
-        self.__textbox_beschreibung.bind("<Return>", lambda e: "break")
-        self.__textbox_dauer.bind("<Return>", lambda e: "break")
-        self.__textbox_zeiteinheit.bind("<Return>", lambda e: "break")
-        self.__textbox_vorgaenger.bind("<Return>", lambda e: "break")
-
         if len(self.__treeview_vorgangsliste.get_children()) != 0:
             zeiteinheit = (str(self.__treeview_vorgangsliste.item(
                 self.__treeview_vorgangsliste.get_children()[0])["values"][3]))
-            self.__textbox_zeiteinheit.insert("1.0", zeiteinheit)
+            self.__textbox_zeiteiheit.insert("1.0", zeiteinheit)
 
         TkCommon.center(toplevel)
 
@@ -202,7 +197,7 @@ class EingabeDialoge:
             padx=2,
             pady=2
         )
-        self.__textbox_zeiteinheit = tk.Text(
+        self.__textbox_zeiteiheit = tk.Text(
             toplevel,
             font=fonts.font_block,
             height=0,
@@ -234,7 +229,7 @@ class EingabeDialoge:
         label_index_text.grid(column=1, row=0, sticky="w", padx=2, pady=2)
         self.__textbox_beschreibung.grid(column=1, row=1, sticky="w", padx=2, pady=2)
         self.__textbox_dauer.grid(column=1, row=2, sticky="w", padx=2, pady=2)
-        self.__textbox_zeiteinheit.grid(column=1, row=3, sticky="w", padx=2, pady=2)
+        self.__textbox_zeiteiheit.grid(column=1, row=3, sticky="w", padx=2, pady=2)
         self.__textbox_vorgaenger.grid(column=1, row=4, sticky="w", padx=2, pady=2)
 
         frame = tk.Frame(toplevel)
@@ -262,7 +257,7 @@ class EingabeDialoge:
 
         self.__textbox_beschreibung.bind("<Tab>", TkCommon.tab_pressed)
         self.__textbox_dauer.bind("<Tab>", TkCommon.tab_pressed)
-        self.__textbox_zeiteinheit.bind("<Tab>", TkCommon.tab_pressed)
+        self.__textbox_zeiteiheit.bind("<Tab>", TkCommon.tab_pressed)
         self.__textbox_vorgaenger.bind("<Tab>", TkCommon.tab_pressed)
 
         button_ok.bind(
@@ -283,11 +278,6 @@ class EingabeDialoge:
             lambda event, button=button_abbrechen: TkCommon.leave_button(event, button)
             )
 
-        self.__textbox_beschreibung.bind("<Return>", lambda e: "break")
-        self.__textbox_dauer.bind("<Return>", lambda e: "break")
-        self.__textbox_zeiteinheit.bind("<Return>", lambda e: "break")
-        self.__textbox_vorgaenger.bind("<Return>", lambda e: "break")
-
         if aktives_element:
             beschreibung = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][1])
             dauer = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][2])
@@ -295,45 +285,44 @@ class EingabeDialoge:
             vorgaenger = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][10])
             self.__textbox_beschreibung.insert("1.0", beschreibung)
             self.__textbox_dauer.insert("1.0", dauer)
-            self.__textbox_zeiteinheit.insert("1.0", zeiteinheit)
+            self.__textbox_zeiteiheit.insert("1.0", zeiteinheit)
             self.__textbox_vorgaenger.insert("1.0", vorgaenger)
 
         TkCommon.center(toplevel)
 
     def __button_ok_neuer_vorgang_action(self, toplevel):
-        vorgaenger_liste = []
         try:
-            index = self.__textbox_index.get("1.0", 'end-1c').strip("\n")
+            index_string = self.__textbox_index.get("1.0", 'end-1c').strip("\n")
             beschreibung = self.__textbox_beschreibung.get("1.0", 'end-1c').strip("\n")
-            dauer = self.__textbox_dauer.get("1.0", 'end-1c').strip("\n")
-            zeiteinheit = self.__textbox_zeiteinheit.get("1.0", 'end-1c').strip("\n")
+            dauer_string = self.__textbox_dauer.get("1.0", 'end-1c').strip("\n")
+            zeiteinheit = self.__textbox_zeiteiheit.get("1.0", 'end-1c').strip("\n")
+            vorgaenger_liste_string = self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n")
 
-            if self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n") != "":
-                vorgaenger_liste_string = self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n").split(",")
-                vorgaenger_liste = [int(x) for x in vorgaenger_liste_string]
+            index = int(index_string)
+            dauer = int(dauer_string)
+            vorgaenger_liste = Common.string_zu_liste(vorgaenger_liste_string)
         except ValueError:
             pass
         else:
-            if index != "" and dauer != "":
-                self.__mainwindow.neuer_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
+            if index not in vorgaenger_liste:
+                self.__mainwindow.neuer_vorgang(toplevel, index, beschreibung, dauer, zeiteinheit,
                                                 vorgaenger_liste)
 
     def __button_ok_bearbeite_vorgang_action(self, toplevel, aktives_element):
-        vorgaenger_liste = []
         try:
-            index = str(self.__treeview_vorgangsliste.item(aktives_element)["values"][0])
+            index = self.__treeview_vorgangsliste.item(aktives_element)["values"][0]
             beschreibung = self.__textbox_beschreibung.get("1.0", 'end-1c').strip("\n")
-            dauer = self.__textbox_dauer.get("1.0", 'end-1c').strip("\n")
-            zeiteinheit = self.__textbox_zeiteinheit.get("1.0", 'end-1c').strip("\n")
+            dauer_string = self.__textbox_dauer.get("1.0", 'end-1c').strip("\n")
+            zeiteinheit = self.__textbox_zeiteiheit.get("1.0", 'end-1c').strip("\n")
+            vorgaenger_liste_string = self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n")
 
-            if self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n") != "":
-                vorgaenger_liste_string = self.__textbox_vorgaenger.get("1.0", 'end-1c').strip("\n").split(",")
-                vorgaenger_liste = [int(x) for x in vorgaenger_liste_string]
+            dauer = int(dauer_string)
+            vorgaenger_liste = Common.string_zu_liste(vorgaenger_liste_string)
         except ValueError:
             pass
         else:
-            if index != "" and dauer != "":
-                self.__mainwindow.bearbeite_vorgang(toplevel, int(index), str(beschreibung), int(dauer), zeiteinheit,
+            if index not in vorgaenger_liste:
+                self.__mainwindow.bearbeite_vorgang(toplevel, index, beschreibung, dauer, zeiteinheit,
                                                     vorgaenger_liste, aktives_element)
 
     @staticmethod
