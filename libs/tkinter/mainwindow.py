@@ -10,6 +10,7 @@ from libs.tkinter.fonts import Fonts
 from libs.tkinter.menuleiste import Menuleiste
 from libs.tkinter.vorgangstabelle import Vorgangstabelle
 from libs.tkinter.tkcommon import TkCommon
+from libs.tkinter.darstellung.netzplan import Netzplan
 from libs.tkinter.style import Style
 from libs.tkinter.dialoge.eingabe import EingabeDialoge
 from libs.tkinter.dialoge.fehler import FehlerDialoge
@@ -160,7 +161,7 @@ class Mainwindow:
         button_editiere_vorgang.grid(column=1, row=0, padx=2, pady=2, sticky="w")
         button_loesche_vorgang.grid(column=2, row=0, padx=2, pady=2, sticky="w")
         button_vorgangsliste_berechnen.grid(column=1, row=1, padx=2, pady=2, sticky="w")
-        # button_netzplan_anzeigen.grid(column=2, row=1, padx=2, pady=2, sticky="w")
+        button_netzplan_anzeigen.grid(column=2, row=1, padx=2, pady=2, sticky="w")
 
         # aktiviere Highlighting der Buttons beim Darüberfahren mit der Maus:
         button_neuer_vorgang.bind(
@@ -283,4 +284,5 @@ class Mainwindow:
             c += 1
 
     def __button_netzplan_anzeigen_action(self):
-        pass
+        netzplan = Netzplan(self.__root)
+        netzplan.erstelle_fenster()

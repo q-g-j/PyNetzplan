@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-
+import tkinter
 from tkinter import ttk
 
 from libs.common import Common
+from libs.tkinter.autoscrollbar import AutoScrollbar
 
 
 class Vorgangstabelle:
@@ -67,8 +68,8 @@ class Vorgangstabelle:
         self.__root.rowconfigure(0, weight=1)
         self.__root.columnconfigure(0, weight=1)
 
-        scrollbar_x = ttk.Scrollbar(self.__root, orient="horizontal", command=self.vorgangslisten_tabelle.xview)
-        scrollbar_y = ttk.Scrollbar(self.__root, orient="vertical", command=self.vorgangslisten_tabelle.yview)
+        scrollbar_x = AutoScrollbar(self.__root, orient="horizontal", command=self.vorgangslisten_tabelle.xview)
+        scrollbar_y = AutoScrollbar(self.__root, orient="vertical", command=self.vorgangslisten_tabelle.yview)
         self.vorgangslisten_tabelle.configure(xscrollcommand=scrollbar_x.set)
         self.vorgangslisten_tabelle.configure(yscrollcommand=scrollbar_y.set)
         scrollbar_x.grid(column=0, row=1, sticky="we")
