@@ -64,7 +64,7 @@ class Vorgangstabelle:
         self.vorgangslisten_tabelle.heading("Vorgänger", text="Vorgänger", anchor="center")
         self.vorgangslisten_tabelle.heading("Nachfolger", text="Nachfolger", anchor="center")
 
-        self.vorgangslisten_tabelle.grid(column=0, columnspan=12, row=0, sticky="nsew")
+        self.vorgangslisten_tabelle.grid(column=0, row=0, sticky="nsew")
         self.__root.rowconfigure(0, weight=1)
         self.__root.columnconfigure(0, weight=1)
 

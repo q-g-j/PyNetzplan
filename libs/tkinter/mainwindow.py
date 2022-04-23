@@ -284,5 +284,5 @@ class Mainwindow:
             c += 1
 
     def __button_netzplan_anzeigen_action(self):
-        netzplan = Netzplan(self.__root)
-        netzplan.erstelle_fenster()
+        Netzplan(self.__root, 6, 5)
+        # netzplan.erstelle_fenster()
