@@ -4,11 +4,11 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class ScrollingFrame(tk.Frame):
-    def __init__(self, _parent, _background):
-        tk.Frame.__init__(self, _parent, background=_background)
-        self.canvas = tk.Canvas(self, borderwidth=0, background=_background, highlightthickness=0)
-        self.frame = tk.Frame(self.canvas, background=_background)
+class ScrollingFrame(ttk.Frame):
+    def __init__(self, _parent):
+        ttk.Frame.__init__(self, _parent)
+        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0)
+        self.frame = ttk.Frame(self.canvas, style='Scrolling.TFrame')
 
         self.__scrollbar_y = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.__scrollbar_y.set)

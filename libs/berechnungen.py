@@ -6,12 +6,10 @@
 # Nachfolger, FAZ, FEZ, SAZ, SEZ, Gesamtpuffer und freier Puffer.
 # Zur Berechnung wird eine Vorgangsliste als Parameter benötigt, die Objekte vom Typ Vorgang enthält.
 class Berechnungen:
-    def __init__(self):
-        self.__vorgangsliste = []
-
-    def berechne_vorgangsdaten(self, _vorgangsliste):
+    def __init__(self, _vorgangsliste):
         self.__vorgangsliste = _vorgangsliste
 
+    def berechne_vorgangsdaten(self):
         # überprüfe auf Rekursionsfehler, die zu einer endlosen Schleife führen würden
         # (ein Vorgang darf nicht ein Vorgänger einer seiner Vorgänger sein) und
         # gib ggfs. eine Liste von entsprechenden Paaren ("Vorgang, Vorgänger") zurück:
@@ -118,3 +116,6 @@ class Berechnungen:
             return 0
         else:
             return min(temp_list) - self.__vorgangsliste[index].fez
+
+    def berechne_netzplan(self):
+        pass

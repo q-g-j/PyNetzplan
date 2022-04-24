@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import tkinter as tk
+from tkinter import ttk
 
+from libs.berechnungen import Berechnungen
 from libs.tkinter.fonts import Fonts
 from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.scrollingframe import ScrollingFrame
@@ -16,13 +18,16 @@ class Netzplan(tk.Toplevel):
 
         self.vorgangsliste = _vorgangsliste
 
+        self.__berechnungen = Berechnungen(self.vorgangsliste)
+        self.__berechnungen.berechne_netzplan()
+
         self.config(padx=0, pady=0)
         self.title("Netzplan")
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.__scrolling_frame = ScrollingFrame(self, _background='white')
+        self.__scrolling_frame = ScrollingFrame(self)
         self.__scrolling_frame.grid(column=0, row=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
         self.__vorgang_width = 0
@@ -51,10 +56,10 @@ class Netzplan(tk.Toplevel):
         TkCommon.center(self)
 
 
-class _VorgangFrame(tk.Frame):
+class _VorgangFrame(ttk.Frame):
     def __init__(self, _frame, _vorgang, _spalte, _zeile):
         Style.set_styles()
-        tk.Frame.__init__(self, _frame, relief=tk.SOLID, background='white')
+        ttk.Frame.__init__(self, _frame, relief=tk.SOLID, style='VorgangWhite.TFrame')
         self.grid(column=_spalte, row=_zeile, padx=40, pady=20, sticky='w')
 
         self.width = 0
@@ -62,100 +67,100 @@ class _VorgangFrame(tk.Frame):
 
         fonts = Fonts()
 
-        frame_frueheste = tk.Frame(self, bg='white')
+        frame_frueheste = ttk.Frame(self, style='VorgangWhite.TFrame')
         frame_frueheste.pack(side=tk.TOP, padx=(0, 0), anchor='nw')
         frame_frueheste.pack_propagate(False)
 
-        frame_schwarz_name = tk.Frame(self, bg='black')  # +2
+        frame_schwarz_name = ttk.Frame(self, style='VorgangBlack.TFrame')
         frame_schwarz_name.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw')
         frame_schwarz_name.pack_propagate(False)
 
-        frame_schwarz_dauer_puffer = tk.Frame(self, bg='black')  # +1
+        frame_schwarz_dauer_puffer = ttk.Frame(self, style='VorgangBlack.TFrame')
         frame_schwarz_dauer_puffer.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw')
         frame_schwarz_dauer_puffer.pack_propagate(False)
 
-        frame_spaeteste = tk.Frame(self, bg='white')
+        frame_spaeteste = ttk.Frame(self, style='VorgangWhite.TFrame')
         frame_spaeteste.pack(side=tk.TOP, padx=(0, 0), anchor='nw')
         frame_spaeteste.pack_propagate(False)
 
-        frame_faz = tk.Frame(frame_frueheste, width=40)
+        frame_faz = ttk.Frame(frame_frueheste, width=40)
         frame_faz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_faz.pack_propagate(False)
 
-        frame_fez = tk.Frame(frame_frueheste, width=40)
+        frame_fez = ttk.Frame(frame_frueheste, width=40)
         frame_fez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
         frame_fez.pack_propagate(False)
 
-        frame_index = tk.Frame(frame_schwarz_name, width=40)
+        frame_index = ttk.Frame(frame_schwarz_name, width=40)
         frame_index.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
         frame_index.pack_propagate(False)
 
-        frame_beschreibung = tk.Frame(frame_schwarz_name)
+        frame_beschreibung = ttk.Frame(frame_schwarz_name)
         frame_beschreibung.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
         frame_beschreibung.pack_propagate(False)
 
-        frame_dauer = tk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_dauer = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
         frame_dauer.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_dauer.pack_propagate(False)
 
-        frame_zeiteinheit = tk.Frame(frame_schwarz_dauer_puffer)
+        frame_zeiteinheit = ttk.Frame(frame_schwarz_dauer_puffer)
         frame_zeiteinheit.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_zeiteinheit.pack_propagate(False)
 
-        frame_gp = tk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_gp = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
         frame_gp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_gp.pack_propagate(False)
 
-        frame_fp = tk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_fp = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
         frame_fp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_fp.pack_propagate(False)
 
-        frame_saz = tk.Frame(frame_spaeteste, width=40, bg='white')
+        frame_saz = ttk.Frame(frame_spaeteste, width=40)
         frame_saz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_saz.pack_propagate(False)
 
-        frame_sez = tk.Frame(frame_spaeteste, width=40, bg='white')
+        frame_sez = ttk.Frame(frame_spaeteste, width=40)
         frame_sez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
         frame_sez.pack_propagate(False)
 
-        label_faz = tk.Label(frame_faz, text=str(_vorgang.faz), foreground='black', background='white',
-                             font=fonts.font_main)
+        label_faz = ttk.Label(frame_faz, text=str(_vorgang.faz), style='VorgangWhite.TLabel',
+                              font=fonts.font_main)
         label_faz.pack(fill=tk.BOTH, expand=True)
 
-        label_fez = tk.Label(frame_fez, text=str(_vorgang.fez), foreground='black', background='white',
-                             font=fonts.font_main)
+        label_fez = ttk.Label(frame_fez, text=str(_vorgang.fez), style='VorgangWhite.TLabel',
+                              font=fonts.font_main)
         label_fez.pack(fill=tk.BOTH, expand=True)
 
-        label_index = tk.Label(frame_index, text=str(_vorgang.index), foreground='black', background='#d9d9d9',
-                               font=fonts.font_main)
+        label_index = ttk.Label(frame_index, text=str(_vorgang.index), style='VorgangGrey.TLabel',
+                                font=fonts.font_main)
         label_index.pack(fill=tk.BOTH, expand=True)
 
-        label_beschreibung = tk.Label(frame_beschreibung, text=_vorgang.beschreibung, foreground='black',
-                                      background='#d9d9d9', font=fonts.font_main)
+        label_beschreibung = ttk.Label(frame_beschreibung, text=_vorgang.beschreibung, style='VorgangGrey.TLabel',
+                                       font=fonts.font_main)
         label_beschreibung.pack(fill=tk.BOTH, expand=True)
 
-        label_dauer = tk.Label(frame_dauer, text=str(_vorgang.dauer), foreground='black', background='#d9d9d9',
-                               font=fonts.font_main)
+        label_dauer = ttk.Label(frame_dauer, text=str(_vorgang.dauer), style='VorgangGrey.TLabel',
+                                font=fonts.font_main)
         label_dauer.pack(fill=tk.BOTH, expand=True)
 
-        label_zeiteinheit = tk.Label(frame_zeiteinheit, text=str(_vorgang.zeiteinheit), foreground='black',
-                                     background='#d9d9d9', font=fonts.font_main)
+        label_zeiteinheit = ttk.Label(frame_zeiteinheit, text=str(_vorgang.zeiteinheit), style='VorgangGrey.TLabel',
+                                      font=fonts.font_main)
         label_zeiteinheit.pack(fill=tk.BOTH, expand=True)
 
-        label_gp = tk.Label(frame_gp, text=str(_vorgang.gp), foreground='black', background='#d9d9d9',
-                            font=fonts.font_main)
+        label_gp = ttk.Label(frame_gp, text=str(_vorgang.gp), style='VorgangGrey.TLabel',
+                             font=fonts.font_main)
         label_gp.pack(fill=tk.BOTH, expand=True)
 
-        label_fp = tk.Label(frame_fp, text=str(_vorgang.fp), foreground='black', background='#d9d9d9',
-                            font=fonts.font_main)
+        label_fp = ttk.Label(frame_fp, text=str(_vorgang.fp), style='VorgangGrey.TLabel',
+                             font=fonts.font_main)
         label_fp.pack(fill=tk.BOTH, expand=True)
 
-        label_saz = tk.Label(frame_saz, text=str(_vorgang.saz), foreground='black', background='white',
-                             font=fonts.font_main)
+        label_saz = ttk.Label(frame_saz, text=str(_vorgang.saz), style='VorgangWhite.TLabel',
+                              font=fonts.font_main)
         label_saz.pack(fill=tk.BOTH, expand=True)
 
-        label_sez = tk.Label(frame_sez, text=str(_vorgang.sez), foreground='black', background='white',
-                             font=fonts.font_main)
+        label_sez = ttk.Label(frame_sez, text=str(_vorgang.sez), style='VorgangWhite.TLabel',
+                              font=fonts.font_main)
         label_sez.pack(fill=tk.BOTH, expand=True)
 
         if label_beschreibung.winfo_reqwidth() + 10 < 3 * 40:

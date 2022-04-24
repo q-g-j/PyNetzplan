@@ -39,3 +39,27 @@ class Style:
             'Treeview',
             rowheight=26
         )
+        style.configure(
+            'VorgangWhite.TLabel',
+            foreground='black',
+            background='white',
+            anchor='center'
+        )
+        style.configure(
+            'VorgangGrey.TLabel',
+            foreground='black',
+            background='#d9d9d9',
+            anchor='center'
+        )
+        style.configure(
+            'VorgangWhite.TFrame',
+            background='white'
+        )
+        style.configure(
+            'VorgangBlack.TFrame',
+            background='black'
+        )
+        style.configure(
+            'Scrolling.TFrame',
+            background='white'
+        )

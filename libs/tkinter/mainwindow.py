@@ -120,8 +120,8 @@ class Mainwindow:
         dialog.destroy()
 
     def __erstelle_mainwindow_buttons(self):
-        button_frame_left = tk.Frame(self.__frame_mainwindow_buttons)
-        button_frame_right = tk.Frame(self.__frame_mainwindow_buttons)
+        button_frame_left = ttk.Frame(self.__frame_mainwindow_buttons)
+        button_frame_right = ttk.Frame(self.__frame_mainwindow_buttons)
         button_frame_left.pack(side=tk.TOP, anchor='nw', padx=2, pady=2, fill=tk.Y, expand=False)
         button_frame_right.pack(side=tk.RIGHT, padx=2, pady=2, fill=tk.Y, expand=False)
 
@@ -250,8 +250,8 @@ class Mainwindow:
             vorgang.vorgaenger_liste = vorgaenger_liste
             vorgangsliste.append(vorgang)
 
-        berechnungen = Berechnungen()
-        rekursionsfehler_liste = berechnungen.berechne_vorgangsdaten(vorgangsliste)
+        berechnungen = Berechnungen(vorgangsliste)
+        rekursionsfehler_liste = berechnungen.berechne_vorgangsdaten()
 
         if len(rekursionsfehler_liste) != 0:
             self.__fehler_dialoge.vorgaenger_rekursions_fehler(rekursionsfehler_liste)
