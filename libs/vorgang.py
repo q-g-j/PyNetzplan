@@ -15,3 +15,5 @@ class Vorgang:
         self.fp = 0
         self.vorgaenger_liste = []
         self.nachfolger_liste = []
+        self.gridx = -1
+        self.gridy = -1

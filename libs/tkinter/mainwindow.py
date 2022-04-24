@@ -241,15 +241,12 @@ class Mainwindow:
     def __button_vorgangsliste_berechnen_action(self):
         vorgangsliste = []
         for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
-            index = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0])
-            beschreibung = str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][1])
-            dauer = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][2])
             vorgaenger_liste = Common.string_zu_liste(
                 str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][10]))
             vorgang = Vorgang()
-            vorgang.index = index
-            vorgang.beschreibung = beschreibung
-            vorgang.dauer = dauer
+            vorgang.index = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0])
+            vorgang.beschreibung = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][1]
+            vorgang.dauer = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][2])
             vorgang.vorgaenger_liste = vorgaenger_liste
             vorgangsliste.append(vorgang)
 
@@ -284,5 +281,27 @@ class Mainwindow:
             c += 1
 
     def __button_netzplan_anzeigen_action(self):
-        Netzplan(self.__root, 6, 5)
-        # netzplan.erstelle_fenster()
+        self.__button_vorgangsliste_berechnen_action()
+
+        vorgangsliste = []
+        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+            vorgaenger_liste = Common.string_zu_liste(
+                str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][10]))
+            nachfolger_liste = Common.string_zu_liste(
+                str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][11]))
+            vorgang = Vorgang()
+            vorgang.index = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0])
+            vorgang.beschreibung = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][1]
+            vorgang.dauer = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][2])
+            vorgang.zeiteinheit = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][3]
+            vorgang.faz = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][4])
+            vorgang.fez = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][5])
+            vorgang.saz = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][6])
+            vorgang.sez = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][7])
+            vorgang.gp = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][8])
+            vorgang.fp = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][9])
+            vorgang.vorgaenger_liste = vorgaenger_liste
+            vorgang.nachfolger_liste = nachfolger_liste
+            vorgangsliste.append(vorgang)
+
+        Netzplan(self.__root, vorgangsliste)

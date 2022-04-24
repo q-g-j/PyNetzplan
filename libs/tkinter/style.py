@@ -41,5 +41,5 @@ class Style:
         )
         style.configure(
             'Treeview',
-            rowheight=24
+            rowheight=26
         )

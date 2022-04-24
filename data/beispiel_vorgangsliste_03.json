@@ -24,7 +24,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            1
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -38,7 +40,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            2
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -52,7 +56,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            3
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -66,7 +72,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            4
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -80,7 +88,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            4
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -94,7 +104,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            3
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -108,7 +120,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            3
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -122,7 +136,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            6
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -136,7 +152,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            14
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -150,7 +168,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            12
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -164,7 +184,9 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            14
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -178,7 +200,12 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            5,
+            9,
+            10,
+            11
+        ],
         "Nachfolgerliste": []
     },
     {
@@ -192,7 +219,10 @@
         "SEZ": "",
         "GP": "",
         "FP": "",
-        "Vorgaengerliste": [],
+        "Vorgaengerliste": [
+            7,
+            8
+        ],
         "Nachfolgerliste": []
     }
 ]

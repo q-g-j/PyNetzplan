@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from tkinter import ttk
-
-from libs.common import Common
-from libs.tkinter.fonts import Fonts
-
 
 class TkCommon:
     @staticmethod
@@ -19,7 +14,6 @@ class TkCommon:
         x = window.winfo_screenwidth() // 2 - win_width // 2
         y = window.winfo_screenheight() // 2 - win_height // 2
         window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-        window.deiconify()
 
     @staticmethod
     def tab_pressed(event):
