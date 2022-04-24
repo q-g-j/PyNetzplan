@@ -40,6 +40,13 @@ class Mainwindow:
         self.__menuleiste.erstelle_menuleiste()
         self.__erstelle_mainwindow_buttons()
 
+        if 1330 > self.__root.winfo_screenwidth() or \
+                800 > self.__root.winfo_screenheight():
+            self.__root.geometry("%sx%s" % (str(int(self.__root.winfo_screenwidth() * 0.9)),
+                                            str(int(self.__root.winfo_screenheight() * 0.8))))
+        else:
+            self.__root.geometry("1330x800")
+
         TkCommon.center(self.__root)
 
     def neuer_vorgang(self, dialog, index, beschreibung, dauer, zeiteinheit, vorgaenger_liste):

@@ -33,8 +33,8 @@ class Netzplan(tk.Toplevel):
         self.__vorgang_width = 0
         self.__vorgang_height = 0
 
-        self.__spalten = 5
-        self.__zeilen = 5
+        self.__spalten = len(self.vorgangsliste)
+        self.__zeilen = 0
 
         spalte = 0
         zeile = 0
@@ -48,10 +48,15 @@ class Netzplan(tk.Toplevel):
             self.vorgangsliste[vorgangsindex].gridy = zeile
             spalte += 1
 
-        # Berechne die Größe des Fensters:
-        self.__scrolling_frame.canvas.config(width=self.__spalten * (self.__vorgang_width + 80),
-                                             height=self.__zeilen * (self.__vorgang_height + 40))
+        if self.__spalten * (self.__vorgang_width + 80) > self.__root.winfo_screenwidth() or \
+                self.__zeilen * (self.__vorgang_height + 40) > self.__root.winfo_screenheight():
+            self.geometry("%sx%s" % (str(int(self.__root.winfo_screenwidth() * 0.9)),
+                                     str(int(self.__root.winfo_screenheight() * 0.8))))
+        else:
+            self.__scrolling_frame.canvas.config(width=self.__spalten * (self.__vorgang_width + 80),
+                                                 height=self.__zeilen * (self.__vorgang_height + 40))
 
+        self.minsize(800, 400)
         self.deiconify()
         TkCommon.center(self)
 
