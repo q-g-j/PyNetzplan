@@ -13,7 +13,7 @@ class Fonts:
         pyglet.font.add_file(Common.script_path + "/fonts/selawk.ttf")
 
         if platform.system() == "Darwin":
-            self.font_header = (
+            self.font_table_header = (
                 "Selawik",
                 14,
                 "normal"
@@ -39,12 +39,12 @@ class Fonts:
                 13,
                 "bold"
             )
-            self.font_header = (
+            self.font_main = (
                 "Selawik",
-                13,
+                11,
                 "normal"
             )
-            self.font_main = (
+            self.font_buttons = (
                 "Selawik",
                 11,
                 "normal"
@@ -59,9 +59,14 @@ class Fonts:
                 10,
                 "normal"
             )
+            self.font_table_header = (
+                "Selawik",
+                13,
+                "normal"
+            )
             self.font_table = (
                 "Selawik",
-                12,
+                13,
                 "normal"
             )
             self.font_block = (

@@ -25,19 +25,15 @@ class Style:
         )
         style.configure(
             "Header.Treeview.Heading",
-            font=fonts.font_header
+            font=fonts.font_table_header
         )
         style.configure(
             "Normal.TButton",
-            font=fonts.font_main
+            font=fonts.font_buttons
         )
         style.configure(
             "Accent.TButton",
-            font=fonts.font_main
-        )
-        style.configure(
-            "TCheckbutton",
-            font=fonts.font_main
+            font=fonts.font_buttons
         )
         style.configure(
             'Treeview',

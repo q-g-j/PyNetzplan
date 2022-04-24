@@ -17,3 +17,4 @@ class Vorgang:
         self.nachfolger_liste = []
         self.gridx = -1
         self.gridy = -1
+        self.frame_width = -1

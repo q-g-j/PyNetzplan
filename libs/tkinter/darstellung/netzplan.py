@@ -48,8 +48,6 @@ class Netzplan(tk.Toplevel):
                                              height=self.__zeilen * (self.__vorgang_height + 40))
 
         self.deiconify()
-        # self.wm_transient(self.__root)
-        self.resizable(width=True, height=True)
         TkCommon.center(self)
 
 
@@ -160,8 +158,8 @@ class _VorgangFrame(tk.Frame):
                              font=fonts.font_main)
         label_sez.pack(fill=tk.BOTH, expand=True)
 
-        if label_beschreibung.winfo_reqwidth() < 3 * 40 + 10:
-            label_beschreibung_width = 3 * 40 + 10
+        if label_beschreibung.winfo_reqwidth() + 10 < 3 * 40:
+            label_beschreibung_width = 3 * 40
         else:
             label_beschreibung_width = label_beschreibung.winfo_reqwidth() + 10
 
@@ -190,6 +188,8 @@ class _VorgangFrame(tk.Frame):
         frame_fp.config(height=vorgangframe_base_height)
         frame_saz.config(height=vorgangframe_base_height)
         frame_sez.config(height=vorgangframe_base_height)
+
+        _vorgang.frame_width = vorgangframe_base_width
 
         self.update_idletasks()
         self.pack_propagate(False)
