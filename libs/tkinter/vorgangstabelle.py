@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
-import tkinter
+
 from tkinter import ttk
 
 from libs.common import Common
 from libs.tkinter.autoscrollbar import AutoScrollbar
 
 
-class Vorgangstabelle:
-    def __init__(self, _root):
-        self.__root = _root
-        self.vorgangslisten_tabelle = None
+class Vorgangstabelle(ttk.Treeview):
+    def __init__(self, _parent):
+        ttk.Treeview.__init__(self, _parent, show='headings',
+                              height=25, style="Header.Treeview")
 
-    def erstelle_vorgangslisten_tabelle(self):
-        self.vorgangslisten_tabelle = ttk.Treeview(self.__root, show='headings',
-                                                   height=25, style="Header.Treeview")
-
-        self.vorgangslisten_tabelle.tag_configure('odd_row', background='#40403e')
+        self.tag_configure('odd_row', background='#40403e')
         # self.vorgangelisten_tabelle.tag_bind('selected', '<1>', self.cb)
         # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewSelect>>', self.cb)
         # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewOpen>>', self.cb)
         # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewClose>>', self.cb)
 
-        self.vorgangslisten_tabelle['columns'] = (
+        self['columns'] = (
             'Nummer',
             'Beschreibung',
             'Dauer',
@@ -36,55 +32,55 @@ class Vorgangstabelle:
             'Nachfolger'
         )
 
-        self.vorgangslisten_tabelle.column("#0", width=0, stretch=False)
-        self.vorgangslisten_tabelle.column("Nummer", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("Beschreibung", anchor="w", minwidth=300, stretch=True)
-        self.vorgangslisten_tabelle.column("Dauer", anchor="e", width=70, stretch=False)
-        self.vorgangslisten_tabelle.column("Zeiteinheit", anchor="w", width=120, stretch=False)
-        self.vorgangslisten_tabelle.column("FAZ", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("FEZ", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("SAZ", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("SEZ", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("GP", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("FP", anchor="e", width=50, stretch=False)
-        self.vorgangslisten_tabelle.column("Vorgänger", anchor="w", minwidth=240, stretch=True)
-        self.vorgangslisten_tabelle.column("Nachfolger", anchor="w", minwidth=240, stretch=True)
+        self.column("#0", width=0, stretch=False)
+        self.column("Nummer", anchor="e", width=50, stretch=False)
+        self.column("Beschreibung", anchor="w", minwidth=300, stretch=True)
+        self.column("Dauer", anchor="e", width=70, stretch=False)
+        self.column("Zeiteinheit", anchor="w", width=120, stretch=False)
+        self.column("FAZ", anchor="e", width=50, stretch=False)
+        self.column("FEZ", anchor="e", width=50, stretch=False)
+        self.column("SAZ", anchor="e", width=50, stretch=False)
+        self.column("SEZ", anchor="e", width=50, stretch=False)
+        self.column("GP", anchor="e", width=50, stretch=False)
+        self.column("FP", anchor="e", width=50, stretch=False)
+        self.column("Vorgänger", anchor="w", minwidth=240, stretch=True)
+        self.column("Nachfolger", anchor="w", minwidth=240, stretch=True)
 
-        self.vorgangslisten_tabelle.heading("#0", text="", anchor="center")
-        self.vorgangslisten_tabelle.heading("Nummer", text="Nr.", anchor="center")
-        self.vorgangslisten_tabelle.heading("Beschreibung", text="Beschreibung", anchor="center")
-        self.vorgangslisten_tabelle.heading("Dauer", text="Dauer", anchor="center")
-        self.vorgangslisten_tabelle.heading("Zeiteinheit", text="Zeiteinheit", anchor="center")
-        self.vorgangslisten_tabelle.heading("FAZ", text="FAZ", anchor="center")
-        self.vorgangslisten_tabelle.heading("FEZ", text="FEZ", anchor="center")
-        self.vorgangslisten_tabelle.heading("SAZ", text="SAZ", anchor="center")
-        self.vorgangslisten_tabelle.heading("SEZ", text="SEZ", anchor="center")
-        self.vorgangslisten_tabelle.heading("GP", text="GP", anchor="center")
-        self.vorgangslisten_tabelle.heading("FP", text="FP", anchor="center")
-        self.vorgangslisten_tabelle.heading("Vorgänger", text="Vorgänger", anchor="center")
-        self.vorgangslisten_tabelle.heading("Nachfolger", text="Nachfolger", anchor="center")
+        self.heading("#0", text="", anchor="center")
+        self.heading("Nummer", text="Nr.", anchor="center")
+        self.heading("Beschreibung", text="Beschreibung", anchor="center")
+        self.heading("Dauer", text="Dauer", anchor="center")
+        self.heading("Zeiteinheit", text="Zeiteinheit", anchor="center")
+        self.heading("FAZ", text="FAZ", anchor="center")
+        self.heading("FEZ", text="FEZ", anchor="center")
+        self.heading("SAZ", text="SAZ", anchor="center")
+        self.heading("SEZ", text="SEZ", anchor="center")
+        self.heading("GP", text="GP", anchor="center")
+        self.heading("FP", text="FP", anchor="center")
+        self.heading("Vorgänger", text="Vorgänger", anchor="center")
+        self.heading("Nachfolger", text="Nachfolger", anchor="center")
 
-        self.vorgangslisten_tabelle.grid(column=0, row=0, sticky="nsew")
-        self.__root.rowconfigure(0, weight=1)
-        self.__root.columnconfigure(0, weight=1)
+        self.grid(column=0, row=0, sticky="nsew")
+        _parent.rowconfigure(0, weight=1)
+        _parent.columnconfigure(0, weight=1)
 
-        scrollbar_x = AutoScrollbar(self.__root, orient="horizontal", command=self.vorgangslisten_tabelle.xview)
-        scrollbar_y = AutoScrollbar(self.__root, orient="vertical", command=self.vorgangslisten_tabelle.yview)
-        self.vorgangslisten_tabelle.configure(xscrollcommand=scrollbar_x.set)
-        self.vorgangslisten_tabelle.configure(yscrollcommand=scrollbar_y.set)
+        scrollbar_x = AutoScrollbar(_parent, orient="horizontal", command=self.xview)
+        scrollbar_y = AutoScrollbar(_parent, orient="vertical", command=self.yview)
+        self.configure(xscrollcommand=scrollbar_x.set)
+        self.configure(yscrollcommand=scrollbar_y.set)
         scrollbar_x.grid(column=0, row=1, sticky="we")
         scrollbar_y.grid(column=1, row=0, sticky="ns")
 
     def vorgangslisten_tabelle_verschiebe_nach_links(self, ab_index):
         verschoben_index_liste = []
-        for item in self.vorgangslisten_tabelle.get_children():
-            if int(self.vorgangslisten_tabelle.item(item)['values'][0]) >= int(ab_index):
-                verschoben_index_liste.append(int(self.vorgangslisten_tabelle.item(item)['values'][0]))
-                self.vorgangslisten_tabelle.set(item, 0,
-                                                value=int(self.vorgangslisten_tabelle.item(item)['values'][0]) - 1)
+        for item in self.get_children():
+            if int(self.item(item)['values'][0]) >= int(ab_index):
+                verschoben_index_liste.append(int(self.item(item)['values'][0]))
+                self.set(item, 0,
+                         value=int(self.item(item)['values'][0]) - 1)
 
-        for item in self.vorgangslisten_tabelle.get_children():
-            vorgaenger_liste = Common.string_zu_liste(str(self.vorgangslisten_tabelle.item(item)['values'][10]))
+        for item in self.get_children():
+            vorgaenger_liste = Common.string_zu_liste(str(self.item(item)['values'][10]))
 
             for vorgaengerindex in range(len(vorgaenger_liste)):
                 if int(vorgaenger_liste[vorgaengerindex]) in verschoben_index_liste:
@@ -92,18 +88,18 @@ class Vorgangstabelle:
 
             vorgaenger_liste_string = Common.liste_zu_string(vorgaenger_liste)
 
-            self.vorgangslisten_tabelle.set(item, 10, value=vorgaenger_liste_string)
+            self.set(item, 10, value=vorgaenger_liste_string)
 
     def vorgangslisten_tabelle_verschiebe_nach_rechts(self, ab_index):
         verschoben_index_liste = []
-        for item in self.vorgangslisten_tabelle.get_children():
-            if int(self.vorgangslisten_tabelle.item(item)['values'][0]) >= int(ab_index):
-                verschoben_index_liste.append(int(self.vorgangslisten_tabelle.item(item)['values'][0]))
-                self.vorgangslisten_tabelle.set(item, 0,
-                                                value=int(self.vorgangslisten_tabelle.item(item)['values'][0]) + 1)
+        for item in self.get_children():
+            if int(self.item(item)['values'][0]) >= int(ab_index):
+                verschoben_index_liste.append(int(self.item(item)['values'][0]))
+                self.set(item, 0,
+                         value=int(self.item(item)['values'][0]) + 1)
 
-        for item in self.vorgangslisten_tabelle.get_children():
-            vorgaenger_liste = Common.string_zu_liste(str(self.vorgangslisten_tabelle.item(item)['values'][10]))
+        for item in self.get_children():
+            vorgaenger_liste = Common.string_zu_liste(str(self.item(item)['values'][10]))
 
             for vorgaengerindex in range(len(vorgaenger_liste)):
                 if int(vorgaenger_liste[vorgaengerindex]) in verschoben_index_liste:
@@ -111,13 +107,13 @@ class Vorgangstabelle:
 
             vorgaenger_liste_string = Common.liste_zu_string(vorgaenger_liste)
 
-            self.vorgangslisten_tabelle.set(item, 10, value=vorgaenger_liste_string)
+            self.set(item, 10, value=vorgaenger_liste_string)
 
     def vorgangslisten_tabelle_streifen(self):
-        for itemindex in range(len(self.vorgangslisten_tabelle.get_children())):
+        for itemindex in range(len(self.get_children())):
             if itemindex % 2 != 0:
-                self.vorgangslisten_tabelle.item(
-                    self.vorgangslisten_tabelle.get_children()[itemindex], tags=('odd_row',))
+                self.item(
+                    self.get_children()[itemindex], tags=('odd_row',))
             else:
-                self.vorgangslisten_tabelle.item(
-                    self.vorgangslisten_tabelle.get_children()[itemindex], tags=())
+                self.item(
+                    self.get_children()[itemindex], tags=())

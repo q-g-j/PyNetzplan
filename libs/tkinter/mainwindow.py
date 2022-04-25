@@ -30,14 +30,11 @@ class Mainwindow:
         self.__frame_mainwindow_buttons.pack(side=tk.BOTTOM, fill=tk.X, expand=False)
         self.__frame_vorgangstabelle.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.__vorgangstabelle = Vorgangstabelle(self.__frame_vorgangstabelle)
-        self.__vorgangstabelle.erstelle_vorgangslisten_tabelle()
 
         self.__fonts = Fonts()
-        self.__menuleiste = Menuleiste(self.__root, self.__vorgangstabelle.vorgangslisten_tabelle)
-        self.__dialog_neuervorgang = EingabeDialoge(self.__root, self, self.__vorgangstabelle.vorgangslisten_tabelle)
+        Menuleiste(self.__root, self.__vorgangstabelle)
+        self.__dialog_neuervorgang = EingabeDialoge(self.__root, self, self.__vorgangstabelle)
         self.__fehler_dialoge = FehlerDialoge(self.__root)
-
-        self.__menuleiste.erstelle_menuleiste()
         self.__erstelle_mainwindow_buttons()
 
         if 1330 > self.__root.winfo_screenwidth() or \
@@ -51,15 +48,15 @@ class Mainwindow:
 
     def neuer_vorgang(self, dialog, index, beschreibung, dauer, zeiteinheit, vorgaenger_liste):
         # falls der angeforderte Index bereits belegt ist, verschiebe alle Indexe ab "index" um eins nach rechts:
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
-            if self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0] == index:
+        for item in self.__vorgangstabelle.get_children():
+            if self.__vorgangstabelle.item(item)['values'][0] == index:
                 self.__vorgangstabelle.vorgangslisten_tabelle_verschiebe_nach_rechts(index)
                 break
 
         # Setze die Werte aller Vorgänge zurück
         # (außer: Index, Beschreibung, Dauer, Vorgängerliste):
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
-            values = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values']
+        for item in self.__vorgangstabelle.get_children():
+            values = self.__vorgangstabelle.item(item)['values']
             temp_list = list()
             for i in range(len(values)):
                 if i not in (0, 1, 2, 3, 10):
@@ -67,8 +64,8 @@ class Mainwindow:
                 elif i == 3:
                     temp_list.append(zeiteinheit)
                 else:
-                    temp_list.append(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][i])
-            self.__vorgangstabelle.vorgangslisten_tabelle.item(item, values=temp_list)
+                    temp_list.append(self.__vorgangstabelle.item(item)['values'][i])
+            self.__vorgangstabelle.item(item, values=temp_list)
 
         # Füge schließlich den neuen Vorgang an der angeforderten Position ein:
         temp_list = list()
@@ -85,7 +82,7 @@ class Mainwindow:
                 temp_list.append(Common.liste_zu_string(vorgaenger_liste))
             else:
                 temp_list.append("")
-        self.__vorgangstabelle.vorgangslisten_tabelle.insert(parent='', index=index - 1, text='', values=temp_list)
+        self.__vorgangstabelle.insert(parent='', index=index - 1, text='', values=temp_list)
 
         self.__vorgangstabelle.vorgangslisten_tabelle_streifen()
 
@@ -95,16 +92,16 @@ class Mainwindow:
     def bearbeite_vorgang(self, dialog, index, beschreibung, dauer, zeiteinheit, vorgaenger_liste, aktives_element):
         # Setze die Werte aller Vorgänge zurück
         # (außer: Index, Beschreibung, Dauer, Zeiteinheit, Vorgängerliste):
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+        for item in self.__vorgangstabelle.get_children():
             temp_list = []
             for i in range(11):
                 if i in (0, 1, 2, 10):
-                    temp_list.append(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][i])
+                    temp_list.append(self.__vorgangstabelle.item(item)['values'][i])
                 elif i == 3:
                     temp_list.append(zeiteinheit)
                 else:
                     temp_list.append("")
-            self.__vorgangstabelle.vorgangslisten_tabelle.item(item, values=temp_list)
+            self.__vorgangstabelle.item(item, values=temp_list)
 
         # Setze die neuen Werte für den zu bearbeitenden Vorgang:
         temp_list = list()
@@ -121,7 +118,7 @@ class Mainwindow:
                 temp_list.append(Common.liste_zu_string(vorgaenger_liste))
             else:
                 temp_list.append("")
-        self.__vorgangstabelle.vorgangslisten_tabelle.item(aktives_element, values=temp_list)
+        self.__vorgangstabelle.item(aktives_element, values=temp_list)
 
         # schließe den Dialog:
         dialog.destroy()
@@ -216,22 +213,22 @@ class Mainwindow:
         self.__dialog_neuervorgang.neuer_vorgang()
 
     def __button_bearbeite_vorgang_action(self):
-        if len(self.__vorgangstabelle.vorgangslisten_tabelle.get_children()) != 0:
+        if len(self.__vorgangstabelle.get_children()) != 0:
             try:
-                aktives_element = self.__vorgangstabelle.vorgangslisten_tabelle.selection()[0]
+                aktives_element = self.__vorgangstabelle.selection()[0]
                 self.__dialog_neuervorgang.bearbeite_vorgang(aktives_element)
             except IndexError:
                 pass
 
     def __button_loesche_vorgang_action(self):
-        if len(self.__vorgangstabelle.vorgangslisten_tabelle.get_children()) != 0:
-            aktives_item = self.__vorgangstabelle.vorgangslisten_tabelle.selection()[0]
-            ab_index = self.__vorgangstabelle.vorgangslisten_tabelle.item(aktives_item)['values'][0]
-            self.__vorgangstabelle.vorgangslisten_tabelle.delete(aktives_item)
+        if len(self.__vorgangstabelle.get_children()) != 0:
+            aktives_item = self.__vorgangstabelle.selection()[0]
+            ab_index = self.__vorgangstabelle.item(aktives_item)['values'][0]
+            self.__vorgangstabelle.delete(aktives_item)
 
-            for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+            for item in self.__vorgangstabelle.get_children():
                 vorgaenger_liste = Common.string_zu_liste(
-                    str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][10]))
+                    str(self.__vorgangstabelle.item(item)['values'][10]))
 
                 for vorgaenger in vorgaenger_liste:
                     if int(vorgaenger) == int(ab_index):
@@ -239,7 +236,7 @@ class Mainwindow:
 
                 vorgaenger_liste_string = Common.liste_zu_string(vorgaenger_liste)
 
-                self.__vorgangstabelle.vorgangslisten_tabelle.set(item, 10, value=vorgaenger_liste_string)
+                self.__vorgangstabelle.set(item, 10, value=vorgaenger_liste_string)
 
             self.__vorgangstabelle.vorgangslisten_tabelle_verschiebe_nach_links(ab_index)
 
@@ -247,13 +244,13 @@ class Mainwindow:
 
     def __button_vorgangsliste_berechnen_action(self):
         vorgangsliste = []
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+        for item in self.__vorgangstabelle.get_children():
             vorgaenger_liste = Common.string_zu_liste(
-                str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][10]))
+                str(self.__vorgangstabelle.item(item)['values'][10]))
             vorgang = Vorgang()
-            vorgang.index = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0])
-            vorgang.beschreibung = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][1]
-            vorgang.dauer = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][2])
+            vorgang.index = int(self.__vorgangstabelle.item(item)['values'][0])
+            vorgang.beschreibung = self.__vorgangstabelle.item(item)['values'][1]
+            vorgang.dauer = int(self.__vorgangstabelle.item(item)['values'][2])
             vorgang.vorgaenger_liste = vorgaenger_liste
             vorgangsliste.append(vorgang)
 
@@ -264,11 +261,11 @@ class Mainwindow:
             self.__fehler_dialoge.vorgaenger_rekursions_fehler(rekursionsfehler_liste)
 
         c = 0
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+        for item in self.__vorgangstabelle.get_children():
             index = vorgangsliste[c].index
             beschreibung = vorgangsliste[c].beschreibung
             dauer = vorgangsliste[c].dauer
-            zeiteinheit = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][3]
+            zeiteinheit = self.__vorgangstabelle.item(item)['values'][3]
             faz = vorgangsliste[c].faz
             fez = vorgangsliste[c].fez
             saz = vorgangsliste[c].saz
@@ -280,10 +277,10 @@ class Mainwindow:
             nachfolger_liste = vorgangsliste[c].nachfolger_liste
             nachfolger_liste_string = Common.liste_zu_string(nachfolger_liste)
 
-            self.__vorgangstabelle.vorgangslisten_tabelle.item(item, values=(index, beschreibung, dauer, zeiteinheit,
-                                                                             faz, fez, saz, sez, gp, fp,
-                                                                             vorgaenger_liste_string,
-                                                                             nachfolger_liste_string))
+            self.__vorgangstabelle.item(item, values=(index, beschreibung, dauer, zeiteinheit,
+                                                      faz, fez, saz, sez, gp, fp,
+                                                      vorgaenger_liste_string,
+                                                      nachfolger_liste_string))
 
             c += 1
 
@@ -291,22 +288,22 @@ class Mainwindow:
         self.__button_vorgangsliste_berechnen_action()
 
         vorgangsliste = []
-        for item in self.__vorgangstabelle.vorgangslisten_tabelle.get_children():
+        for item in self.__vorgangstabelle.get_children():
             vorgaenger_liste = Common.string_zu_liste(
-                str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][10]))
+                str(self.__vorgangstabelle.item(item)['values'][10]))
             nachfolger_liste = Common.string_zu_liste(
-                str(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][11]))
+                str(self.__vorgangstabelle.item(item)['values'][11]))
             vorgang = Vorgang()
-            vorgang.index = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][0])
-            vorgang.beschreibung = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][1]
-            vorgang.dauer = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][2])
-            vorgang.zeiteinheit = self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][3]
-            vorgang.faz = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][4])
-            vorgang.fez = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][5])
-            vorgang.saz = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][6])
-            vorgang.sez = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][7])
-            vorgang.gp = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][8])
-            vorgang.fp = int(self.__vorgangstabelle.vorgangslisten_tabelle.item(item)['values'][9])
+            vorgang.index = int(self.__vorgangstabelle.item(item)['values'][0])
+            vorgang.beschreibung = self.__vorgangstabelle.item(item)['values'][1]
+            vorgang.dauer = int(self.__vorgangstabelle.item(item)['values'][2])
+            vorgang.zeiteinheit = self.__vorgangstabelle.item(item)['values'][3]
+            vorgang.faz = int(self.__vorgangstabelle.item(item)['values'][4])
+            vorgang.fez = int(self.__vorgangstabelle.item(item)['values'][5])
+            vorgang.saz = int(self.__vorgangstabelle.item(item)['values'][6])
+            vorgang.sez = int(self.__vorgangstabelle.item(item)['values'][7])
+            vorgang.gp = int(self.__vorgangstabelle.item(item)['values'][8])
+            vorgang.fp = int(self.__vorgangstabelle.item(item)['values'][9])
             vorgang.vorgaenger_liste = vorgaenger_liste
             vorgang.nachfolger_liste = nachfolger_liste
             vorgangsliste.append(vorgang)

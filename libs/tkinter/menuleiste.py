@@ -5,20 +5,17 @@ import tkinter as tk
 from tkinter import filedialog
 
 from libs.common import Common
-from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.fonts import Fonts
 
 
-class Menuleiste:
-    def __init__(self, _root, _treeview_vorgangsliste):
-        self.__root = _root
+class Menuleiste(tk.Menu):
+    def __init__(self, _parent, _treeview_vorgangsliste):
+        tk.Menu.__init__(self, _parent)
+        self.__parent = _parent
         self.__treeview_vorgangsliste = _treeview_vorgangsliste
         self.__fonts = Fonts()
-
-    def erstelle_menuleiste(self):
-        menuleiste = tk.Menu(self.__root)
-        dateimenu = tk.Menu(menuleiste)
-        darstellungsmenu = tk.Menu(menuleiste)
+        dateimenu = tk.Menu(self)
+        darstellungsmenu = tk.Menu(self)
 
         dateimenu.add_command(label="Neue Vorgangsliste", font=self.__fonts.font_menu,
                               command=self.__menuleiste_dateimenu_neu_action)
@@ -35,16 +32,16 @@ class Menuleiste:
         darstellungsmenu.add_command(label="Dark-Modus", font=self.__fonts.font_menu,
                                      command=self.__menuleiste_darstellungsmenu_darkmode_action)
 
-        menuleiste.add_cascade(label="Datei", menu=dateimenu)
+        self.add_cascade(label="Datei", menu=dateimenu)
         # menuleiste.add_cascade(label="Darstellung", menu=darstellungsmenu)
 
-        self.__root.config(menu=menuleiste)
+        self.__parent.config(menu=self)
 
     def __menuleiste_darstellungsmenu_lightmode_action(self):
-        self.__root.tk.call("set_theme", "light")
+        self.__parent.tk.call("set_theme", "light")
 
     def __menuleiste_darstellungsmenu_darkmode_action(self):
-        self.__root.tk.call("set_theme", "dark")
+        self.__parent.tk.call("set_theme", "dark")
 
     def __menuleiste_dateimenu_neu_action(self):
         for i in self.__treeview_vorgangsliste.get_children():
@@ -194,6 +191,6 @@ class Menuleiste:
             json_datei.write(json_data)
 
     def __menuleiste_dateimenu_beenden_action(self):
-        self.__root.destroy()
+        self.__parent.destroy()
         quit()
         
