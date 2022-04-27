@@ -136,6 +136,9 @@ class Berechnungen:
     def berechne_netzplan(self, _vorgangsliste):
         column_dict = dict()
 
+        spalten_max = 0
+        zeilen_max = 0
+
         column = 1
         for vorgang in self.__vorgangsliste:
             if vorgang.faz not in column_dict.keys():
@@ -155,12 +158,17 @@ class Berechnungen:
 
         column = 0
         for key in sorted_dict.keys():
+            spalten_max += 1
             row = 0
             for vorgangsindex in sorted_dict[key]:
                 _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_spalte = column
                 _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_zeile = row
+                if zeilen_max <= row:
+                    zeilen_max += 1
                 row += 1
             column += 1
+
+        return spalten_max, zeilen_max
 
     def konv_vorgangsindex_nach_listenindex(self, _vorgang):
         for i in range(len(self.__vorgangsliste)):

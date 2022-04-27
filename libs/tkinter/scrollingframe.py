@@ -7,7 +7,7 @@ from tkinter import ttk
 class ScrollingFrame(ttk.Frame):
     def __init__(self, _parent):
         ttk.Frame.__init__(self, _parent)
-        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0)
+        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0, background='white')
         self.frame = ttk.Frame(self.canvas, style='Scrolling.TFrame')
 
         self.__scrollbar_y = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
@@ -23,6 +23,8 @@ class ScrollingFrame(ttk.Frame):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
+        self.__scrollbar_y_sichtbar = True
 
         self.frame.bind("<Configure>", self.__on_frame_configure)
         self.canvas.bind("<Configure>", self.on_canvas_configure)
@@ -51,47 +53,49 @@ class ScrollingFrame(ttk.Frame):
                 new_height = self.winfo_height()
                 # Hide the scrollbar when not needed
                 self.__scrollbar_y.grid_remove()
+                self.__scrollbar_y_sichtbar = False
             else:
                 new_height = min_height
                 # Show the scrollbar when needed
                 self.__scrollbar_y.grid()
+                self.__scrollbar_y_sichtbar = True
 
             self.canvas.itemconfig(self.__canvas_window, width=new_width, height=new_height)
 
         self.canvas.bind(
-            "<MouseWheel>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<MouseWheel>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.canvas.bind(
-            "<Button-4>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<Button-4>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.canvas.bind(
-            "<Button-5>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<Button-5>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
 
         self.frame.bind(
-            "<MouseWheel>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<MouseWheel>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind(
-            "<Button-4>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<Button-4>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind(
-            "<Button-5>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            "<Button-5>", lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
 
         self.frame.bind_class(
             "TFrame", "<MouseWheel>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind_class(
             "TFrame", "<Button-4>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind_class(
             "TFrame", "<Button-5>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
 
         self.frame.bind_class(
             "TLabel", "<MouseWheel>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind_class(
             "TLabel", "<Button-4>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
         self.frame.bind_class(
             "TLabel", "<Button-5>",
-            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+            lambda event, c=self.canvas: self.__on_mousewheel_scroll(event, c))
 
-    @staticmethod
-    def __mousewheel_scroll_handler(_event, _canvas):
-        _canvas.yview_scroll(int(-1 * (_event.delta / 120)), "units")
+    def __on_mousewheel_scroll(self, _event, _canvas):
+        if self.__scrollbar_y_sichtbar:
+            _canvas.yview_scroll(int(-1 * (_event.delta / 120)), "units")

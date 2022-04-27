@@ -2,6 +2,8 @@
 
 import tkinter as tk
 from tkinter import ttk
+# from PIL import Image
+# import time
 
 from libs.berechnungen import Berechnungen
 from libs.tkinter.fonts import Fonts
@@ -19,8 +21,23 @@ class Netzplan(tk.Toplevel):
 
         self.vorgangsliste = _vorgangsliste
 
+        self.__vorgangs_2d_liste = list()
+
         self.__berechnungen = Berechnungen(self.vorgangsliste)
-        self.__berechnungen.berechne_netzplan(self.vorgangsliste)
+        self.__spalten, self.__zeilen = self.__berechnungen.berechne_netzplan(self.vorgangsliste)
+
+        spalten_liste = list()
+        for vorgang in self.vorgangsliste:
+            if vorgang.grid_spalte not in spalten_liste:
+                spalten_liste.append(vorgang.grid_spalte)
+
+        for spalte in range(max(spalten_liste)):
+            self.__vorgangs_2d_liste.append(list())
+
+        for spalte in range(max(spalten_liste)):
+            for vorgang in self.vorgangsliste:
+                if vorgang.grid_spalte == spalte:
+                    self.__vorgangs_2d_liste[spalte].append(vorgang)
 
         self.config(padx=0, pady=0)
         self.title("Netzplan")
@@ -31,24 +48,15 @@ class Netzplan(tk.Toplevel):
         self.__scrolling_frame = ScrollingFrame(self)
         self.__scrolling_frame.grid(column=0, row=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
-        self.__vorgang_width = 0
-        self.__vorgang_height = 0
-
-        self.__spalten = len(self.vorgangsliste)
-        self.__zeilen = 0
-
-        spalte = 0
-        zeile = 0
+        zeilen_hoehe = 0
         zeile_max = 0
         for vorgangsindex in range(len(self.vorgangsliste)):
             vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex])
             vorgang_frame.grid(column=self.vorgangsliste[vorgangsindex].grid_spalte,
                                row=self.vorgangsliste[vorgangsindex].grid_zeile, padx=40, pady=20, sticky='w')
-            self.__vorgang_width = vorgang_frame.width
-            self.__vorgang_height = vorgang_frame.height
             if zeile_max < self.vorgangsliste[vorgangsindex].grid_zeile:
                 zeile_max = self.vorgangsliste[vorgangsindex].grid_zeile
-            spalte += 1
+            zeilen_hoehe = vorgang_frame.height
 
         legende = Vorgang()
         legende.index = "Nr."
@@ -63,21 +71,37 @@ class Netzplan(tk.Toplevel):
         legende.fp = "FP"
 
         legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende)
-        legenden_frame.grid(column=0, row=zeile_max + 1, padx=40, pady=20, sticky='w')
-        label_leer_1 = tk.Label(self.__scrolling_frame.frame, width=0, background='white', height=4)
-        label_leer_1.grid(column=0, row=zeile_max + 1)
-        legenden_frame.grid(column=0, row=zeile_max + 2)
+        legenden_frame.grid(column=0, row=zeile_max + 1, padx=40, pady=(60, 30), sticky='w')
+        self.__zeilen += 1
 
-        if self.__spalten * (self.__vorgang_width + 80) > self.__root.winfo_screenwidth() or \
-                self.__zeilen * (self.__vorgang_height + 50) > self.__root.winfo_screenheight():
-            self.geometry("%sx%s" % (str(int(self.__root.winfo_screenwidth() * 0.9)),
-                                     str(int(self.__root.winfo_screenheight() * 0.8))))
+        frame_breiten_liste = list()
+
+        for i in range(len(self.__vorgangs_2d_liste)):
+            frame_breiten_liste.append(list())
+            for j in range(len(self.__vorgangs_2d_liste[i])):
+                frame_breiten_liste[i].append(self.__vorgangs_2d_liste[i][j].frame_breite)
+
+        frame_breiten_gesamt = 0
+
+        for i in range(len(frame_breiten_liste)):
+            frame_breiten_gesamt += max(frame_breiten_liste[i])
+
+        if self.__spalten * 80 + frame_breiten_gesamt + 50 > self.__root.winfo_screenwidth() or \
+                self.__zeilen * (zeilen_hoehe + 40) + 40 > self.__root.winfo_screenheight():
+            window_width = self.__root.winfo_screenwidth() * 0.9
+            window_height = self.__root.winfo_screenheight() * 0.8
         else:
-            self.__scrolling_frame.canvas.config(width=self.__spalten * (self.__vorgang_width + 80),
-                                                 height=self.__zeilen * (self.__vorgang_height + 50))
+            window_width = self.__spalten * 80 + frame_breiten_gesamt + 50
+            window_height = self.__zeilen * (zeilen_hoehe + 40) + 40
 
-        self.minsize(800, 450)
+        self.minsize(500, 300)
+
+        self.__scrolling_frame.canvas.config(width=window_width, height=window_height)
+
+        self.__scrolling_frame.canvas.configure(scrollregion=self.__scrolling_frame.canvas.bbox("all"))
+
         self.deiconify()
+
         TkCommon.center(self)
 
 
@@ -218,7 +242,7 @@ class _VorgangFrame(ttk.Frame):
         frame_saz.config(height=vorgangframe_base_height)
         frame_sez.config(height=vorgangframe_base_height)
 
-        _vorgang.frame_width = vorgangframe_base_width
+        _vorgang.frame_breite = vorgangframe_base_width
 
         self.update_idletasks()
         self.pack_propagate(False)
