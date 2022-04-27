@@ -73,10 +73,23 @@ class ScrollingFrame(ttk.Frame):
             "<Button-5>", lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
 
         self.frame.bind_class(
-            "Frame", "<MouseWheel>",
+            "TFrame", "<MouseWheel>",
             lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
         self.frame.bind_class(
-            "Label", "<MouseWheel>",
+            "TFrame", "<Button-4>",
+            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+        self.frame.bind_class(
+            "TFrame", "<Button-5>",
+            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+
+        self.frame.bind_class(
+            "TLabel", "<MouseWheel>",
+            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+        self.frame.bind_class(
+            "TLabel", "<Button-4>",
+            lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
+        self.frame.bind_class(
+            "TLabel", "<Button-5>",
             lambda event, c=self.canvas: ScrollingFrame.__mousewheel_scroll_handler(event, c))
 
     @staticmethod

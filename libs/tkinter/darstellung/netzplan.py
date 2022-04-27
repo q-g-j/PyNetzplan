@@ -41,10 +41,9 @@ class Netzplan(tk.Toplevel):
         zeile = 0
         zeile_max = 0
         for vorgangsindex in range(len(self.vorgangsliste)):
-            vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex],
-                                          spalte, zeile)
+            vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex])
             vorgang_frame.grid(column=self.vorgangsliste[vorgangsindex].grid_spalte,
-                               row=self.vorgangsliste[vorgangsindex].grid_zeile)
+                               row=self.vorgangsliste[vorgangsindex].grid_zeile, padx=40, pady=20, sticky='w')
             self.__vorgang_width = vorgang_frame.width
             self.__vorgang_height = vorgang_frame.height
             if zeile_max < self.vorgangsliste[vorgangsindex].grid_zeile:
@@ -63,9 +62,8 @@ class Netzplan(tk.Toplevel):
         legende.gp = "GP"
         legende.fp = "FP"
 
-        legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende,
-                                       0, zeile_max + 1)
-        print(zeile_max)
+        legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende)
+        legenden_frame.grid(column=0, row=zeile_max + 1, padx=40, pady=20, sticky='w')
         label_leer_1 = tk.Label(self.__scrolling_frame.frame, width=0, background='white', height=4)
         label_leer_1.grid(column=0, row=zeile_max + 1)
         legenden_frame.grid(column=0, row=zeile_max + 2)
@@ -84,10 +82,9 @@ class Netzplan(tk.Toplevel):
 
 
 class _VorgangFrame(ttk.Frame):
-    def __init__(self, _frame, _vorgang, _spalte, _zeile):
+    def __init__(self, _frame, _vorgang):
         Style.set_styles()
         ttk.Frame.__init__(self, _frame, relief=tk.SOLID, style='VorgangWhite.TFrame')
-        self.grid(column=_spalte, row=_zeile, padx=40, pady=20, sticky='w')
 
         self.width = 0
         self.height = 0
