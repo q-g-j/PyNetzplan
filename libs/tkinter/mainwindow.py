@@ -308,4 +308,5 @@ class Mainwindow:
             vorgang.nachfolger_liste = nachfolger_liste
             vorgangsliste.append(vorgang)
 
-        Netzplan(self.__root, vorgangsliste)
+        if len(self.__vorgangstabelle.get_children()) != 0:
+            Netzplan(self.__root, vorgangsliste)

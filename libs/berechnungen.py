@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 
 # Diese Klasse stellt die Methode "berechne_vorgangsdaten()" für das Berechnen der
 # folgenden Vorgangsdaten zur Verfügung:
@@ -8,6 +10,8 @@
 class Berechnungen:
     def __init__(self, _vorgangsliste):
         self.__vorgangsliste = _vorgangsliste
+        sys.setrecursionlimit(999999999)
+        self.__baum = list()
 
     def berechne_vorgangsdaten(self):
         # überprüfe auf Rekursionsfehler, die zu einer endlosen Schleife führen würden
@@ -117,5 +121,84 @@ class Berechnungen:
         else:
             return min(temp_list) - self.__vorgangsliste[index].fez
 
-    def berechne_netzplan(self):
+    def __pfade(self, _liste2d, _tree, _vorgangindex):
+        if len(_liste2d) == 0 and len(_tree[_vorgangindex]) != 0:
+            _liste2d.append(list())
+            _liste2d[len(_liste2d) - 1].append(0)
+        for nachfolgerindex in _tree[_vorgangindex]:
+            if nachfolgerindex not in _liste2d[len(_liste2d) - 1]:
+                _liste2d[len(_liste2d) - 1].append(nachfolgerindex)
+                self.__pfade(_liste2d, _tree, nachfolgerindex)
+
+    def kritischer_pfad(self, _vorgangslistenindex, _kp):
         pass
+
+    def berechne_netzplan(self, _vorgangsliste):
+        column_dict = dict()
+
+        column = 1
+        for vorgang in self.__vorgangsliste:
+            if vorgang.faz not in column_dict.keys():
+                temp_liste = list()
+                temp_liste.append(vorgang.index)
+                for vorgang_neu in self.__vorgangsliste:
+                    if vorgang_neu.index not in temp_liste:
+                        if vorgang_neu.faz == vorgang.faz:
+                            temp_liste.append(vorgang_neu.index)
+                column_dict[vorgang.faz] = temp_liste
+                column += 1
+
+        sorted_dict = dict()
+
+        for key in sorted(column_dict):
+            sorted_dict[key] = column_dict[key]
+
+        column = 0
+        for key in sorted_dict.keys():
+            row = 0
+            for vorgangsindex in sorted_dict[key]:
+                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_spalte = column
+                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_zeile = row
+                row += 1
+            column += 1
+
+    def konv_vorgangsindex_nach_listenindex(self, _vorgang):
+        for i in range(len(self.__vorgangsliste)):
+            if self.__vorgangsliste[i].index == _vorgang:
+                return i
+
+    def konv_listenindex_nach_vorgangsindex(self, _vorgangsindex):
+        return self.__vorgangsliste[_vorgangsindex].index
+
+    @staticmethod
+    def __erstelle_baum(elements):
+        root = list()
+        list_of_nodes = []
+
+        for i in range(len(elements)):
+            list_of_nodes.append(Node(i))
+
+        for i in range(len(elements)):
+
+            if elements[i] == -1:
+                root = list_of_nodes[i]
+
+            else:
+                list_of_nodes[elements[i]].add_child(list_of_nodes[i])
+
+        return root
+
+
+class Node:
+    def __init__(self, _index):
+        self.index = _index
+        self.children = list()
+
+    def add_child(self, _childindex):
+        self.children.append(_childindex)
+
+    def get_children(self):
+        return self.children
+
+    def get_index(self):
+        return self.index

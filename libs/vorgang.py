@@ -15,6 +15,6 @@ class Vorgang:
         self.fp = 0
         self.vorgaenger_liste = []
         self.nachfolger_liste = []
-        self.gridx = -1
-        self.gridy = -1
+        self.grid_spalte = -1
+        self.grid_zeile = -1
         self.frame_width = -1

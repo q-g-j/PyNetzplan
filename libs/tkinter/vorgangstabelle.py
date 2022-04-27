@@ -12,10 +12,6 @@ class Vorgangstabelle(ttk.Treeview):
                               height=25, style="Header.Treeview")
 
         self.tag_configure('odd_row', background='#40403e')
-        # self.vorgangelisten_tabelle.tag_bind('selected', '<1>', self.cb)
-        # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewSelect>>', self.cb)
-        # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewOpen>>', self.cb)
-        # self.vorgangelisten_tabelle.tag_bind('selected', '<<TreeviewClose>>', self.cb)
 
         self['columns'] = (
             'Nummer',

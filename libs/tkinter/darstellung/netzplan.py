@@ -8,6 +8,7 @@ from libs.tkinter.fonts import Fonts
 from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.scrollingframe import ScrollingFrame
 from libs.tkinter.style import Style
+from libs.vorgang import Vorgang
 
 
 class Netzplan(tk.Toplevel):
@@ -19,7 +20,7 @@ class Netzplan(tk.Toplevel):
         self.vorgangsliste = _vorgangsliste
 
         self.__berechnungen = Berechnungen(self.vorgangsliste)
-        self.__berechnungen.berechne_netzplan()
+        self.__berechnungen.berechne_netzplan(self.vorgangsliste)
 
         self.config(padx=0, pady=0)
         self.title("Netzplan")
@@ -38,25 +39,46 @@ class Netzplan(tk.Toplevel):
 
         spalte = 0
         zeile = 0
+        zeile_max = 0
         for vorgangsindex in range(len(self.vorgangsliste)):
             vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex],
                                           spalte, zeile)
-            vorgang_frame.grid(column=spalte, row=zeile)
+            vorgang_frame.grid(column=self.vorgangsliste[vorgangsindex].grid_spalte,
+                               row=self.vorgangsliste[vorgangsindex].grid_zeile)
             self.__vorgang_width = vorgang_frame.width
             self.__vorgang_height = vorgang_frame.height
-            self.vorgangsliste[vorgangsindex].gridx = spalte
-            self.vorgangsliste[vorgangsindex].gridy = zeile
+            if zeile_max < self.vorgangsliste[vorgangsindex].grid_zeile:
+                zeile_max = self.vorgangsliste[vorgangsindex].grid_zeile
             spalte += 1
 
+        legende = Vorgang()
+        legende.index = "Nr."
+        legende.beschreibung = "Beschreibung"
+        legende.dauer = "Dauer"
+        legende.zeiteinheit = "Zeiteinheit"
+        legende.faz = "FAZ"
+        legende.fez = "FEZ"
+        legende.saz = "SAZ"
+        legende.sez = "SEZ"
+        legende.gp = "GP"
+        legende.fp = "FP"
+
+        legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende,
+                                       0, zeile_max + 1)
+        print(zeile_max)
+        label_leer_1 = tk.Label(self.__scrolling_frame.frame, width=0, background='white', height=4)
+        label_leer_1.grid(column=0, row=zeile_max + 1)
+        legenden_frame.grid(column=0, row=zeile_max + 2)
+
         if self.__spalten * (self.__vorgang_width + 80) > self.__root.winfo_screenwidth() or \
-                self.__zeilen * (self.__vorgang_height + 40) > self.__root.winfo_screenheight():
+                self.__zeilen * (self.__vorgang_height + 50) > self.__root.winfo_screenheight():
             self.geometry("%sx%s" % (str(int(self.__root.winfo_screenwidth() * 0.9)),
                                      str(int(self.__root.winfo_screenheight() * 0.8))))
         else:
             self.__scrolling_frame.canvas.config(width=self.__spalten * (self.__vorgang_width + 80),
-                                                 height=self.__zeilen * (self.__vorgang_height + 40))
+                                                 height=self.__zeilen * (self.__vorgang_height + 50))
 
-        self.minsize(800, 400)
+        self.minsize(800, 450)
         self.deiconify()
         TkCommon.center(self)
 
@@ -88,15 +110,15 @@ class _VorgangFrame(ttk.Frame):
         frame_spaeteste.pack(side=tk.TOP, padx=(0, 0), anchor='nw')
         frame_spaeteste.pack_propagate(False)
 
-        frame_faz = ttk.Frame(frame_frueheste, width=40)
+        frame_faz = ttk.Frame(frame_frueheste, width=50)
         frame_faz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_faz.pack_propagate(False)
 
-        frame_fez = ttk.Frame(frame_frueheste, width=40)
+        frame_fez = ttk.Frame(frame_frueheste, width=50)
         frame_fez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
         frame_fez.pack_propagate(False)
 
-        frame_index = ttk.Frame(frame_schwarz_name, width=40)
+        frame_index = ttk.Frame(frame_schwarz_name, width=50)
         frame_index.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
         frame_index.pack_propagate(False)
 
@@ -104,7 +126,7 @@ class _VorgangFrame(ttk.Frame):
         frame_beschreibung.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
         frame_beschreibung.pack_propagate(False)
 
-        frame_dauer = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_dauer = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
         frame_dauer.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_dauer.pack_propagate(False)
 
@@ -112,19 +134,19 @@ class _VorgangFrame(ttk.Frame):
         frame_zeiteinheit.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_zeiteinheit.pack_propagate(False)
 
-        frame_gp = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_gp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
         frame_gp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_gp.pack_propagate(False)
 
-        frame_fp = ttk.Frame(frame_schwarz_dauer_puffer, width=40)
+        frame_fp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
         frame_fp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_fp.pack_propagate(False)
 
-        frame_saz = ttk.Frame(frame_spaeteste, width=40)
+        frame_saz = ttk.Frame(frame_spaeteste, width=50)
         frame_saz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
         frame_saz.pack_propagate(False)
 
-        frame_sez = ttk.Frame(frame_spaeteste, width=40)
+        frame_sez = ttk.Frame(frame_spaeteste, width=50)
         frame_sez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
         frame_sez.pack_propagate(False)
 
@@ -168,18 +190,18 @@ class _VorgangFrame(ttk.Frame):
                               font=fonts.font_main)
         label_sez.pack(fill=tk.BOTH, expand=True)
 
-        if label_beschreibung.winfo_reqwidth() + 10 < 3 * 40:
-            label_beschreibung_width = 3 * 40
+        if label_beschreibung.winfo_reqwidth() + 10 < 3 * 50:
+            label_beschreibung_width = 3 * 50
         else:
             label_beschreibung_width = label_beschreibung.winfo_reqwidth() + 10
 
         label_zeiteinheit_width = label_zeiteinheit.winfo_reqwidth() + 10
 
-        vorgangframe_base_width = label_beschreibung_width + 40 + 3
+        vorgangframe_base_width = label_beschreibung_width + 50 + 3
         vorgangframe_base_height = label_beschreibung.winfo_reqheight()
 
-        if vorgangframe_base_width < label_zeiteinheit_width + 3 * 40 + 5:
-            vorgangframe_base_width = label_zeiteinheit_width + 3 * 40 + 5
+        if vorgangframe_base_width < label_zeiteinheit_width + 3 * 50 + 5:
+            vorgangframe_base_width = label_zeiteinheit_width + 3 * 50 + 5
 
         self.width = vorgangframe_base_width
         self.height = vorgangframe_base_height * 4 + 3
@@ -191,9 +213,9 @@ class _VorgangFrame(ttk.Frame):
         frame_faz.config(height=vorgangframe_base_height)
         frame_fez.config(height=vorgangframe_base_height)
         frame_index.config(height=vorgangframe_base_height)
-        frame_beschreibung.config(width=vorgangframe_base_width - 40 - 3, height=vorgangframe_base_height)
+        frame_beschreibung.config(width=vorgangframe_base_width - 50 - 3, height=vorgangframe_base_height)
         frame_dauer.config(height=vorgangframe_base_height)
-        frame_zeiteinheit.config(width=vorgangframe_base_width - 3 * 40 - 5, height=vorgangframe_base_height)
+        frame_zeiteinheit.config(width=vorgangframe_base_width - 3 * 50 - 5, height=vorgangframe_base_height)
         frame_gp.config(height=vorgangframe_base_height)
         frame_fp.config(height=vorgangframe_base_height)
         frame_saz.config(height=vorgangframe_base_height)
