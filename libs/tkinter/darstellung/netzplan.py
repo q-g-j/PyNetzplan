@@ -19,22 +19,25 @@ class Netzplan(tk.Toplevel):
         self.__root = _root
         self.withdraw()
 
-        self.vorgangsliste = _vorgangsliste
+        self.__grid_abstand_horizontal = 30
+        self.__grid_abstand_vertikal = 20
 
-        self.__vorgangs_2d_liste = list()
+        self.vorgangsliste = _vorgangsliste
 
         self.__berechnungen = Berechnungen(self.vorgangsliste)
         self.__spalten, self.__zeilen = self.__berechnungen.berechne_netzplan(self.vorgangsliste)
+
+        self.__vorgangs_2d_liste = list()
 
         spalten_liste = list()
         for vorgang in self.vorgangsliste:
             if vorgang.grid_spalte not in spalten_liste:
                 spalten_liste.append(vorgang.grid_spalte)
 
-        for spalte in range(max(spalten_liste)):
+        for spalte in range(max(spalten_liste) + 1):
             self.__vorgangs_2d_liste.append(list())
 
-        for spalte in range(max(spalten_liste)):
+        for spalte in range(max(spalten_liste) + 1):
             for vorgang in self.vorgangsliste:
                 if vorgang.grid_spalte == spalte:
                     self.__vorgangs_2d_liste[spalte].append(vorgang)
@@ -53,10 +56,11 @@ class Netzplan(tk.Toplevel):
         for vorgangsindex in range(len(self.vorgangsliste)):
             vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex])
             vorgang_frame.grid(column=self.vorgangsliste[vorgangsindex].grid_spalte,
-                               row=self.vorgangsliste[vorgangsindex].grid_zeile, padx=40, pady=20, sticky='w')
+                               row=self.vorgangsliste[vorgangsindex].grid_zeile, padx=self.__grid_abstand_horizontal,
+                               pady=self.__grid_abstand_vertikal, sticky='w')
             if zeile_max < self.vorgangsliste[vorgangsindex].grid_zeile:
                 zeile_max = self.vorgangsliste[vorgangsindex].grid_zeile
-            zeilen_hoehe = vorgang_frame.height
+            zeilen_hoehe = vorgang_frame.hoehe
 
         legende = Vorgang()
         legende.index = "Nr."
@@ -71,10 +75,13 @@ class Netzplan(tk.Toplevel):
         legende.fp = "FP"
 
         legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende)
-        legenden_frame.grid(column=0, row=zeile_max + 1, padx=40, pady=(60, 30), sticky='w')
+        legenden_frame.grid(column=0, columnspan=2, row=zeile_max + 1, padx=self.__grid_abstand_horizontal,
+                            pady=(60, 30), sticky='w')
         self.__zeilen += 1
 
         frame_breiten_liste = list()
+
+        print(len(self.__vorgangs_2d_liste))
 
         for i in range(len(self.__vorgangs_2d_liste)):
             frame_breiten_liste.append(list())
@@ -86,13 +93,17 @@ class Netzplan(tk.Toplevel):
         for i in range(len(frame_breiten_liste)):
             frame_breiten_gesamt += max(frame_breiten_liste[i])
 
-        if self.__spalten * 80 + frame_breiten_gesamt + 50 > self.__root.winfo_screenwidth() or \
-                self.__zeilen * (zeilen_hoehe + 40) + 40 > self.__root.winfo_screenheight():
+        print(frame_breiten_gesamt)
+
+        if self.__spalten * self.__grid_abstand_horizontal * 2 + frame_breiten_gesamt + 50 > \
+                self.__root.winfo_screenwidth() or \
+                self.__zeilen * (zeilen_hoehe + self.__grid_abstand_vertikal * 2) + 90 + 40 > \
+                self.__root.winfo_screenheight():
             window_width = self.__root.winfo_screenwidth() * 0.9
             window_height = self.__root.winfo_screenheight() * 0.8
         else:
-            window_width = self.__spalten * 80 + frame_breiten_gesamt + 50
-            window_height = self.__zeilen * (zeilen_hoehe + 40) + 40
+            window_width = self.__spalten * self.__grid_abstand_horizontal * 2 + frame_breiten_gesamt
+            window_height = self.__zeilen * (zeilen_hoehe + self.__grid_abstand_vertikal * 2) + 90 + 40
 
         self.minsize(500, 300)
 
@@ -111,64 +122,64 @@ class _VorgangFrame(ttk.Frame):
         ttk.Frame.__init__(self, _frame, relief=tk.SOLID, style='VorgangWhite.TFrame')
 
         self.width = 0
-        self.height = 0
+        self.hoehe = 0
 
         fonts = Fonts()
 
         frame_frueheste = ttk.Frame(self, style='VorgangWhite.TFrame')
-        frame_frueheste.pack(side=tk.TOP, padx=(0, 0), anchor='nw')
+        frame_frueheste.pack(side=tk.TOP, padx=(0, 0), anchor='nw', ipady=2)
         frame_frueheste.pack_propagate(False)
 
         frame_schwarz_name = ttk.Frame(self, style='VorgangBlack.TFrame')
-        frame_schwarz_name.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw')
+        frame_schwarz_name.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw', ipady=2)
         frame_schwarz_name.pack_propagate(False)
 
         frame_schwarz_dauer_puffer = ttk.Frame(self, style='VorgangBlack.TFrame')
-        frame_schwarz_dauer_puffer.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw')
+        frame_schwarz_dauer_puffer.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw', ipady=2)
         frame_schwarz_dauer_puffer.pack_propagate(False)
 
         frame_spaeteste = ttk.Frame(self, style='VorgangWhite.TFrame')
-        frame_spaeteste.pack(side=tk.TOP, padx=(0, 0), anchor='nw')
+        frame_spaeteste.pack(side=tk.TOP, padx=(0, 0), anchor='nw', ipady=2)
         frame_spaeteste.pack_propagate(False)
 
         frame_faz = ttk.Frame(frame_frueheste, width=50)
-        frame_faz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_faz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_faz.pack_propagate(False)
 
         frame_fez = ttk.Frame(frame_frueheste, width=50)
-        frame_fez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
+        frame_fez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw', ipady=2)
         frame_fez.pack_propagate(False)
 
         frame_index = ttk.Frame(frame_schwarz_name, width=50)
-        frame_index.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
+        frame_index.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_index.pack_propagate(False)
 
         frame_beschreibung = ttk.Frame(frame_schwarz_name)
-        frame_beschreibung.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw')
+        frame_beschreibung.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_beschreibung.pack_propagate(False)
 
         frame_dauer = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_dauer.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_dauer.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_dauer.pack_propagate(False)
 
         frame_zeiteinheit = ttk.Frame(frame_schwarz_dauer_puffer)
-        frame_zeiteinheit.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_zeiteinheit.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_zeiteinheit.pack_propagate(False)
 
         frame_gp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_gp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_gp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_gp.pack_propagate(False)
 
         frame_fp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_fp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_fp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_fp.pack_propagate(False)
 
         frame_saz = ttk.Frame(frame_spaeteste, width=50)
-        frame_saz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw')
+        frame_saz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
         frame_saz.pack_propagate(False)
 
         frame_sez = ttk.Frame(frame_spaeteste, width=50)
-        frame_sez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw')
+        frame_sez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw', ipady=2)
         frame_sez.pack_propagate(False)
 
         label_faz = ttk.Label(frame_faz, text=str(_vorgang.faz), style='VorgangWhite.TLabel',
@@ -180,7 +191,7 @@ class _VorgangFrame(ttk.Frame):
         label_fez.pack(fill=tk.BOTH, expand=True)
 
         label_index = ttk.Label(frame_index, text=str(_vorgang.index), style='VorgangGrey.TLabel',
-                                font=fonts.font_main)
+                                font=fonts.font_main_bold)
         label_index.pack(fill=tk.BOTH, expand=True)
 
         label_beschreibung = ttk.Label(frame_beschreibung, text=_vorgang.beschreibung, style='VorgangGrey.TLabel',
@@ -225,7 +236,7 @@ class _VorgangFrame(ttk.Frame):
             vorgangframe_base_width = label_zeiteinheit_width + 3 * 50 + 5
 
         self.width = vorgangframe_base_width
-        self.height = vorgangframe_base_height * 4 + 3
+        self.hoehe = vorgangframe_base_height * 4 + 3
 
         frame_frueheste.config(width=vorgangframe_base_width, height=vorgangframe_base_height)
         frame_schwarz_name.config(width=vorgangframe_base_width, height=vorgangframe_base_height + 2)

@@ -23,6 +23,11 @@ class Fonts:
                 11,
                 "normal"
             )
+            self.font_main_bold = (
+                "Selawik",
+                11,
+                "bold"
+            )
             self.font_buttons = (
                 "Selawik",
                 11,
@@ -63,6 +68,11 @@ class Fonts:
                 "Selawik",
                 11,
                 "normal"
+            )
+            self.font_main_bold = (
+                "Selawik",
+                11,
+                "bold"
             )
             self.font_buttons = (
                 "Selawik",
