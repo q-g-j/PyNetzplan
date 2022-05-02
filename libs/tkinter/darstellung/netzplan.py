@@ -1,49 +1,57 @@
 # -*- coding: utf-8 -*-
 
 import tkinter as tk
-from tkinter import ttk
-# from PIL import Image
-# import time
+import io
+import math
 
 from libs.berechnungen import Berechnungen
-from libs.tkinter.fonts import Fonts
 from libs.tkinter.tkcommon import TkCommon
+from libs.tkinter.fonts import Fonts
 from libs.tkinter.scrollingframe import ScrollingFrame
-from libs.tkinter.style import Style
 from libs.vorgang import Vorgang
+from PIL import Image
 
 
 class Netzplan(tk.Toplevel):
     def __init__(self, _root, _vorgangsliste):
-        tk.Toplevel.__init__(self, _root)
+        tk.Toplevel.__init__(self, _root, borderwidth=0, background='white')
         self.__root = _root
+        self.title("Netzplan")
         self.withdraw()
 
-        self.__grid_abstand_horizontal = 30
-        self.__grid_abstand_vertikal = 20
+        self.__fonts = Fonts()
 
-        self.vorgangsliste = _vorgangsliste
+        self.__canvas_netzplan = None
 
-        self.__berechnungen = Berechnungen(self.vorgangsliste)
-        self.__spalten, self.__zeilen = self.__berechnungen.berechne_netzplan(self.vorgangsliste)
+        self.__vorgangs_breite = 240
+        self.__vorgangs_zeilen_hoehe = 28
+        self.__vorgangs_spalten_breite = 50
+        self.__vorgangs_hoehe = self.__vorgangs_zeilen_hoehe * 4 + 5
 
+        self.___vorgangs_abstand_horizontal = 80
+        self.___vorgangs_abstand_vertikal = 50
+
+        self.__offset_vertikal = 50
+        self.__offset_horizontal = 50
+
+        self.__vorgangsliste = _vorgangsliste
         self.__vorgangs_2d_liste = list()
 
+        self.__berechnungen = Berechnungen(self.__vorgangsliste)
+        self.__spalten, self.__zeilen = self.__berechnungen.berechne_netzplan(self.__vorgangsliste)
+
         spalten_liste = list()
-        for vorgang in self.vorgangsliste:
-            if vorgang.grid_spalte not in spalten_liste:
-                spalten_liste.append(vorgang.grid_spalte)
+        for vorgang in self.__vorgangsliste:
+            if vorgang.grid_coords['spalte'] not in spalten_liste:
+                spalten_liste.append(vorgang.grid_coords['spalte'])
 
         for spalte in range(max(spalten_liste) + 1):
             self.__vorgangs_2d_liste.append(list())
 
         for spalte in range(max(spalten_liste) + 1):
-            for vorgang in self.vorgangsliste:
-                if vorgang.grid_spalte == spalte:
+            for vorgang in self.__vorgangsliste:
+                if vorgang.grid_coords['spalte'] == spalte:
                     self.__vorgangs_2d_liste[spalte].append(vorgang)
-
-        self.config(padx=0, pady=0)
-        self.title("Netzplan")
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -51,16 +59,11 @@ class Netzplan(tk.Toplevel):
         self.__scrolling_frame = ScrollingFrame(self)
         self.__scrolling_frame.grid(column=0, row=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
-        zeilen_hoehe = 0
-        zeile_max = 0
-        for vorgangsindex in range(len(self.vorgangsliste)):
-            vorgang_frame = _VorgangFrame(self.__scrolling_frame.frame, self.vorgangsliste[vorgangsindex])
-            vorgang_frame.grid(column=self.vorgangsliste[vorgangsindex].grid_spalte,
-                               row=self.vorgangsliste[vorgangsindex].grid_zeile, padx=self.__grid_abstand_horizontal,
-                               pady=self.__grid_abstand_vertikal, sticky='w')
-            if zeile_max < self.vorgangsliste[vorgangsindex].grid_zeile:
-                zeile_max = self.vorgangsliste[vorgangsindex].grid_zeile
-            zeilen_hoehe = vorgang_frame.hoehe
+        self.__canvas_netzplan = tk.Canvas(self.__scrolling_frame.frame, background='white', highlightthickness=0)
+        self.__canvas_netzplan.pack(fill=tk.BOTH, expand=True)
+
+        for vorgangsindex in range(len(self.__vorgangsliste)):
+            self.zeichne_vorgang(self.__vorgangsliste[vorgangsindex], False)
 
         legende = Vorgang()
         legende.index = "Nr."
@@ -73,187 +76,247 @@ class Netzplan(tk.Toplevel):
         legende.sez = "SEZ"
         legende.gp = "GP"
         legende.fp = "FP"
+        legende.grid_coords['spalte'] = 0
+        legende.grid_coords['zeile'] = self.__zeilen
 
-        legenden_frame = _VorgangFrame(self.__scrolling_frame.frame, legende)
-        legenden_frame.grid(column=0, columnspan=2, row=zeile_max + 1, padx=self.__grid_abstand_horizontal,
-                            pady=(60, 30), sticky='w')
+        self.zeichne_vorgang(legende, True)
+
         self.__zeilen += 1
 
-        frame_breiten_liste = list()
+        bbox = self.__canvas_netzplan.bbox('all')
 
-        print(len(self.__vorgangs_2d_liste))
+        canvas_width = bbox[2] - bbox[0] + 2 * self.__offset_horizontal
+        canvas_height = bbox[3] - bbox[1] + 2 * self.__offset_vertikal
 
-        for i in range(len(self.__vorgangs_2d_liste)):
-            frame_breiten_liste.append(list())
-            for j in range(len(self.__vorgangs_2d_liste[i])):
-                frame_breiten_liste[i].append(self.__vorgangs_2d_liste[i][j].frame_breite)
+        self.__canvas_netzplan.config(width=canvas_width, height=canvas_height)
 
-        frame_breiten_gesamt = 0
-
-        for i in range(len(frame_breiten_liste)):
-            frame_breiten_gesamt += max(frame_breiten_liste[i])
-
-        print(frame_breiten_gesamt)
-
-        if self.__spalten * self.__grid_abstand_horizontal * 2 + frame_breiten_gesamt + 50 > \
-                self.__root.winfo_screenwidth() or \
-                self.__zeilen * (zeilen_hoehe + self.__grid_abstand_vertikal * 2) + 90 + 40 > \
-                self.__root.winfo_screenheight():
-            window_width = self.__root.winfo_screenwidth() * 0.9
-            window_height = self.__root.winfo_screenheight() * 0.8
-        else:
-            window_width = self.__spalten * self.__grid_abstand_horizontal * 2 + frame_breiten_gesamt
-            window_height = self.__zeilen * (zeilen_hoehe + self.__grid_abstand_vertikal * 2) + 90 + 40
+        if canvas_width + 100 > self.__root.winfo_screenwidth():
+            canvas_width = self.__root.winfo_screenwidth() * 0.9
+        if canvas_height + 100 > self.__root.winfo_screenheight():
+            canvas_height = self.__root.winfo_screenheight() * 0.8
 
         self.minsize(500, 300)
 
-        self.__scrolling_frame.canvas.config(width=window_width, height=window_height)
-
+        self.__scrolling_frame.canvas.config(width=canvas_width, height=canvas_height)
         self.__scrolling_frame.canvas.configure(scrollregion=self.__scrolling_frame.canvas.bbox("all"))
 
         self.deiconify()
 
         TkCommon.center(self)
 
+        self.update()
 
-class _VorgangFrame(ttk.Frame):
-    def __init__(self, _frame, _vorgang):
-        Style.set_styles()
-        ttk.Frame.__init__(self, _frame, relief=tk.SOLID, style='VorgangWhite.TFrame')
+        # ps = self.__canvas_netzplan.postscript(colormode='color', x=0, y=0, pagewidth=canvas_width * 20, pageheight=canvas_height * 20)
+        #
+        # """ canvas postscripts seem to be saved at 0.60 scale, so we need to increase the default dpi (72) by 60 percent """
+        # im = Netzplan.open_eps(ps, dpi=119.5)
+        # im.save('out.eps', dpi=(119.5, 119.5))
+        #
+        # img = Image.open('out.eps')
+        # img.save('out.png', 'png', quality=99)
 
-        self.width = 0
-        self.hoehe = 0
+    @staticmethod
+    def open_eps(ps, dpi=300.0):
+        img = Image.open(io.BytesIO(ps.encode('utf-8')))
+        original = img.size
+        scale = dpi / 72.0
+        # if dpi != 0:
+        #     img.load()
+        if scale != 1:
+            new = (int(round(scale * original[0])), int(round(scale * original[1])))
+            img.thumbnail(new, Image.ANTIALIAS)
+        return img
 
-        fonts = Fonts()
+    def zeichne_vorgang(self, _vorgang, _ist_legende):
+        # weiß und grau ohne linke vertikale Linie
+        vorgang_x1 = self.__offset_horizontal + _vorgang.grid_coords['spalte'] * (
+                self.__vorgangs_breite + self.___vorgangs_abstand_horizontal) + 1
 
-        frame_frueheste = ttk.Frame(self, style='VorgangWhite.TFrame')
-        frame_frueheste.pack(side=tk.TOP, padx=(0, 0), anchor='nw', ipady=2)
-        frame_frueheste.pack_propagate(False)
+        # weiß und grau ohne obere horizontale Linie
+        vorgang_y1 = self.__offset_vertikal + _vorgang.grid_coords['zeile'] * (
+                self.__vorgangs_hoehe + self.___vorgangs_abstand_vertikal) + 1
 
-        frame_schwarz_name = ttk.Frame(self, style='VorgangBlack.TFrame')
-        frame_schwarz_name.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw', ipady=2)
-        frame_schwarz_name.pack_propagate(False)
+        # horizontale Linie oberhalb des grauen Rechtecks:
+        linie_horizontal_1_x1 = vorgang_x1 - 1
+        linie_horizontal_1_y1 = vorgang_y1 + self.__vorgangs_zeilen_hoehe + 1
+        linie_horizontal_1_x2 = linie_horizontal_1_x1 + self.__vorgangs_breite
+        linie_horizontal_1_y2 = linie_horizontal_1_y1
+        self.__canvas_netzplan.create_line(
+            linie_horizontal_1_x1, linie_horizontal_1_y1, linie_horizontal_1_x2, linie_horizontal_1_y2
+        )
 
-        frame_schwarz_dauer_puffer = ttk.Frame(self, style='VorgangBlack.TFrame')
-        frame_schwarz_dauer_puffer.pack(side=tk.TOP, padx=(0, 0), pady=(0, 0), anchor='nw', ipady=2)
-        frame_schwarz_dauer_puffer.pack_propagate(False)
+        # if _vorgang.index == 1:
+        #     linie_horizontal = self.__canvas_netzplan.bbox(linie_horizontal_id)
+        #     linie_horizontal_width = linie_horizontal[2] - linie_horizontal[0]
+        #     linie_horizontal_height = linie_horizontal[3] - linie_horizontal[1]
+        #     print("linie_horizontal_width =", linie_horizontal_width)
+        #     print("linie_horizontal_height =", linie_horizontal_height)
 
-        frame_spaeteste = ttk.Frame(self, style='VorgangWhite.TFrame')
-        frame_spaeteste.pack(side=tk.TOP, padx=(0, 0), anchor='nw', ipady=2)
-        frame_spaeteste.pack_propagate(False)
+        # graues Rechteck, oberer Teil:
+        graues_rechteck_oben_x1 = vorgang_x1
+        graues_rechteck_oben_y1 = vorgang_y1 + self.__vorgangs_zeilen_hoehe + 2
+        graues_rechteck_oben_x2 = vorgang_x1 + self.__vorgangs_breite - 2
+        graues_rechteck_oben_y2 = graues_rechteck_oben_y1 + self.__vorgangs_zeilen_hoehe - 2
+        self.__canvas_netzplan.create_rectangle(
+            graues_rechteck_oben_x1, graues_rechteck_oben_y1, graues_rechteck_oben_x2, graues_rechteck_oben_y2,
+            width=0, outline="", fill='grey80'
+        )
 
-        frame_faz = ttk.Frame(frame_frueheste, width=50)
-        frame_faz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_faz.pack_propagate(False)
+        # if _vorgang.index == 1:
+        #     graues_rechteck_oben = self.__canvas_netzplan.bbox(graues_rechteck_oben_id)
+        #     graues_rechteck_oben_width = graues_rechteck_oben[2] - graues_rechteck_oben[0]
+        #     graues_rechteck_oben_height = graues_rechteck_oben[3] - graues_rechteck_oben[1]
+        #
+        #     print("graues_rechteck_oben_width =", graues_rechteck_oben_width)
+        #     print("graues_rechteck_oben_height =", graues_rechteck_oben_height)
 
-        frame_fez = ttk.Frame(frame_frueheste, width=50)
-        frame_fez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw', ipady=2)
-        frame_fez.pack_propagate(False)
+        # horizontale Linie in der Mitte des grauen Rechtecks:
+        linie_horizontal_2_x1 = vorgang_x1 - 1
+        linie_horizontal_2_y1 = vorgang_y1 + self.__vorgangs_zeilen_hoehe * 2
+        linie_horizontal_2_x2 = linie_horizontal_1_x1 + self.__vorgangs_breite
+        linie_horizontal_2_y2 = linie_horizontal_2_y1
+        self.__canvas_netzplan.create_line(
+            linie_horizontal_2_x1, linie_horizontal_2_y1, linie_horizontal_2_x2, linie_horizontal_2_y2
+        )
 
-        frame_index = ttk.Frame(frame_schwarz_name, width=50)
-        frame_index.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_index.pack_propagate(False)
+        # graues Rechteck, unterer Teil:
+        graues_rechteck_unten_x1 = vorgang_x1
+        graues_rechteck_unten_y1 = vorgang_y1 + self.__vorgangs_zeilen_hoehe * 2 + 1
+        graues_rechteck_unten_x2 = vorgang_x1 + self.__vorgangs_breite - 2
+        graues_rechteck_unten_y2 = graues_rechteck_unten_y1 + self.__vorgangs_zeilen_hoehe - 2
+        self.__canvas_netzplan.create_rectangle(
+            graues_rechteck_unten_x1, graues_rechteck_unten_y1, graues_rechteck_unten_x2, graues_rechteck_unten_y2,
+            width=0, outline="", fill='grey80'
+        )
 
-        frame_beschreibung = ttk.Frame(frame_schwarz_name)
-        frame_beschreibung.pack(padx=(1, 0), pady=(1, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_beschreibung.pack_propagate(False)
+        # if _vorgang.index == 1:
+        #     graues_rechteck_unten = self.__canvas_netzplan.bbox(graues_rechteck_unten_id)
+        #     graues_rechteck_unten_width = graues_rechteck_unten[2] - graues_rechteck_unten[0]
+        #     graues_rechteck_unten_height = graues_rechteck_unten[3] - graues_rechteck_unten[1]
+        #
+        #     print("graues_rechteck_oben_width =", graues_rechteck_unten_width)
+        #     print("graues_rechteck_oben_height =", graues_rechteck_unten_height)
 
-        frame_dauer = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_dauer.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_dauer.pack_propagate(False)
+        # horizontale Linie unterhalb des grauen Rechtecks:
+        linie_horizontal_3_x1 = vorgang_x1 - 1
+        linie_horizontal_3_y1 = vorgang_y1 + self.__vorgangs_zeilen_hoehe * 3 - 1
+        linie_horizontal_3_x2 = linie_horizontal_3_x1 + self.__vorgangs_breite
+        linie_horizontal_3_y2 = linie_horizontal_3_y1
+        self.__canvas_netzplan.create_line(
+            linie_horizontal_3_x1, linie_horizontal_3_y1, linie_horizontal_3_x2, linie_horizontal_3_y2
+        )
 
-        frame_zeiteinheit = ttk.Frame(frame_schwarz_dauer_puffer)
-        frame_zeiteinheit.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_zeiteinheit.pack_propagate(False)
+        # vertikale Linie links:
+        linie_vertikal_links_x1 = linie_horizontal_1_x1
+        linie_vertikal_links_y1 = linie_horizontal_1_y1
+        linie_vertikal_links_x2 = linie_horizontal_1_x1
+        linie_vertikal_links_y2 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe * 2 - 1
+        linie_vertikal_links_id = self.__canvas_netzplan.create_line(
+            linie_vertikal_links_x1, linie_vertikal_links_y1, linie_vertikal_links_x2, linie_vertikal_links_y2
+        )
 
-        frame_gp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_gp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_gp.pack_propagate(False)
+        if _vorgang.index == 1:
+            linie_vertikal_links = self.__canvas_netzplan.bbox(linie_vertikal_links_id)
+            linie_vertikal_links_width = linie_vertikal_links[2] - linie_vertikal_links[0]
+            linie_vertikal_links_height = linie_vertikal_links[3] - linie_vertikal_links[1]
+            print("linie_vertikal_links_width =", linie_vertikal_links_width)
+            print("linie_vertikal_links_height =", linie_vertikal_links_height)
 
-        frame_fp = ttk.Frame(frame_schwarz_dauer_puffer, width=50)
-        frame_fp.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_fp.pack_propagate(False)
+        # vertikale Linie rechts:
+        linie_vertikal_rechts_x1 = linie_horizontal_1_x2 - 1
+        linie_vertikal_rechts_y1 = linie_horizontal_1_y1
+        linie_vertikal_rechts_x2 = linie_vertikal_rechts_x1
+        linie_vertikal_rechts_y2 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe * 2 - 1
+        self.__canvas_netzplan.create_line(
+            linie_vertikal_rechts_x1, linie_vertikal_rechts_y1, linie_vertikal_rechts_x2, linie_vertikal_rechts_y2
+        )
 
-        frame_saz = ttk.Frame(frame_spaeteste, width=50)
-        frame_saz.pack(padx=(1, 0), pady=(0, 0), side=tk.LEFT, anchor='nw', ipady=2)
-        frame_saz.pack_propagate(False)
+        # vertikale Linie Index|Beschreibung und Dauer|Zeiteinheit:
+        linie_vertikal_index_beschreibung_x1 = linie_vertikal_links_x1 + self.__vorgangs_spalten_breite
+        linie_vertikal_index_beschreibung_y1 = linie_horizontal_1_y1
+        linie_vertikal_index_beschreibung_x2 = linie_vertikal_links_x1 + self.__vorgangs_spalten_breite
+        linie_vertikal_index_beschreibung_y2 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe * 2 - 1
+        self.__canvas_netzplan.create_line(
+            linie_vertikal_index_beschreibung_x1, linie_vertikal_index_beschreibung_y1,
+            linie_vertikal_index_beschreibung_x2, linie_vertikal_index_beschreibung_y2
+        )
 
-        frame_sez = ttk.Frame(frame_spaeteste, width=50)
-        frame_sez.pack(padx=(0, 1), pady=(0, 0), side=tk.RIGHT, anchor='nw', ipady=2)
-        frame_sez.pack_propagate(False)
+        # vertikale Linie Zeiteinheit|GP:
+        linie_vertikal_zeiteinheit_gp_x1 = linie_horizontal_1_x2 - self.__vorgangs_spalten_breite * 2 - 1
+        linie_vertikal_zeiteinheit_gp_y1 = linie_horizontal_2_y1
+        linie_vertikal_zeiteinheit_gp_x2 = linie_horizontal_1_x2 - self.__vorgangs_spalten_breite * 2 - 1
+        linie_vertikal_zeiteinheit_gp_y2 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe * 2 - 1
+        self.__canvas_netzplan.create_line(
+            linie_vertikal_zeiteinheit_gp_x1, linie_vertikal_zeiteinheit_gp_y1,
+            linie_vertikal_zeiteinheit_gp_x2, linie_vertikal_zeiteinheit_gp_y2
+        )
 
-        label_faz = ttk.Label(frame_faz, text=str(_vorgang.faz), style='VorgangWhite.TLabel',
-                              font=fonts.font_main)
-        label_faz.pack(fill=tk.BOTH, expand=True)
+        # vertikale Linie GP|FP:
+        linie_vertikal_gp_fp_x1 = linie_horizontal_1_x2 - self.__vorgangs_spalten_breite - 1
+        linie_vertikal_gp_fp_y1 = linie_horizontal_2_y1
+        linie_vertikal_gp_fp_x2 = linie_horizontal_1_x2 - self.__vorgangs_spalten_breite - 1
+        linie_vertikal_gp_fp_y2 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe * 2 - 1
+        self.__canvas_netzplan.create_line(
+            linie_vertikal_gp_fp_x1, linie_vertikal_gp_fp_y1,
+            linie_vertikal_gp_fp_x2, linie_vertikal_gp_fp_y2
+        )
 
-        label_fez = ttk.Label(frame_fez, text=str(_vorgang.fez), style='VorgangWhite.TLabel',
-                              font=fonts.font_main)
-        label_fez.pack(fill=tk.BOTH, expand=True)
+        # FAZ-Text:
+        text_faz_x1 = vorgang_x1 - 1 + self.__vorgangs_spalten_breite / 2
+        text_faz_y1 = vorgang_y1 + 1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_faz_x1, text_faz_y1, text=_vorgang.faz, font=self.__fonts.font_main)
 
-        label_index = ttk.Label(frame_index, text=str(_vorgang.index), style='VorgangGrey.TLabel',
-                                font=fonts.font_main_bold)
-        label_index.pack(fill=tk.BOTH, expand=True)
+        # FEZ-Text:
+        text_fez_x1 = linie_horizontal_1_x2 - 1 - self.__vorgangs_spalten_breite / 2
+        text_fez_y1 = vorgang_y1 + 1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_fez_x1, text_fez_y1, text=_vorgang.fez, font=self.__fonts.font_main)
 
-        label_beschreibung = ttk.Label(frame_beschreibung, text=_vorgang.beschreibung, style='VorgangGrey.TLabel',
-                                       font=fonts.font_main)
-        label_beschreibung.pack(fill=tk.BOTH, expand=True)
+        # Index-Text:
+        text_index_x1 = vorgang_x1 - 1 + self.__vorgangs_spalten_breite / 2
+        text_index_y1 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(
+            text_index_x1, text_index_y1, text=_vorgang.index, font=self.__fonts.font_main_bold
+        )
 
-        label_dauer = ttk.Label(frame_dauer, text=str(_vorgang.dauer), style='VorgangGrey.TLabel',
-                                font=fonts.font_main)
-        label_dauer.pack(fill=tk.BOTH, expand=True)
+        # Beschreibung-Text:
+        text_beschreibung_x1 = vorgang_x1 + self.__vorgangs_breite - 1 - (
+                self.__vorgangs_breite - self.__vorgangs_spalten_breite) / 2
+        text_beschreibung_y1 = linie_horizontal_1_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(
+            text_beschreibung_x1, text_beschreibung_y1, text=_vorgang.beschreibung, font=self.__fonts.font_main
+        )
 
-        label_zeiteinheit = ttk.Label(frame_zeiteinheit, text=str(_vorgang.zeiteinheit), style='VorgangGrey.TLabel',
-                                      font=fonts.font_main)
-        label_zeiteinheit.pack(fill=tk.BOTH, expand=True)
+        # Dauer-Text:
+        text_dauer_x1 = vorgang_x1 - 1 + self.__vorgangs_spalten_breite / 2
+        text_dauer_y1 = linie_horizontal_2_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(
+            text_dauer_x1, text_dauer_y1, text=_vorgang.dauer, font=self.__fonts.font_main
+        )
 
-        label_gp = ttk.Label(frame_gp, text=str(_vorgang.gp), style='VorgangGrey.TLabel',
-                             font=fonts.font_main)
-        label_gp.pack(fill=tk.BOTH, expand=True)
+        # Zeiteinheit-Text:
+        text_zeiteinheit_x1 = vorgang_x1 + self.__vorgangs_spalten_breite - 2 + (
+                self.__vorgangs_breite - self.__vorgangs_spalten_breite * 3) / 2
+        text_zeiteinheit_y1 = linie_horizontal_2_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(
+            text_zeiteinheit_x1, text_zeiteinheit_y1, text=_vorgang.zeiteinheit, font=self.__fonts.font_main
+        )
 
-        label_fp = ttk.Label(frame_fp, text=str(_vorgang.fp), style='VorgangGrey.TLabel',
-                             font=fonts.font_main)
-        label_fp.pack(fill=tk.BOTH, expand=True)
+        # SAZ-Text:
+        text_saz_x1 = vorgang_x1 - 1 + self.__vorgangs_spalten_breite / 2
+        text_saz_y1 = linie_horizontal_3_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_saz_x1, text_saz_y1, text=_vorgang.saz, font=self.__fonts.font_main)
 
-        label_saz = ttk.Label(frame_saz, text=str(_vorgang.saz), style='VorgangWhite.TLabel',
-                              font=fonts.font_main)
-        label_saz.pack(fill=tk.BOTH, expand=True)
+        # SEZ-Text:
+        text_sez_x1 = linie_horizontal_1_x2 - 1 - self.__vorgangs_spalten_breite / 2
+        text_sez_y1 = linie_horizontal_3_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_sez_x1, text_sez_y1, text=_vorgang.sez, font=self.__fonts.font_main)
 
-        label_sez = ttk.Label(frame_sez, text=str(_vorgang.sez), style='VorgangWhite.TLabel',
-                              font=fonts.font_main)
-        label_sez.pack(fill=tk.BOTH, expand=True)
+        # GP-Text:
+        text_gp_x1 = linie_vertikal_rechts_x1 - self.__vorgangs_spalten_breite - self.__vorgangs_spalten_breite / 2
+        text_gp_y1 = linie_horizontal_2_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_gp_x1, text_gp_y1, text=_vorgang.gp, font=self.__fonts.font_main)
 
-        if label_beschreibung.winfo_reqwidth() + 10 < 3 * 50:
-            label_beschreibung_width = 3 * 50
-        else:
-            label_beschreibung_width = label_beschreibung.winfo_reqwidth() + 10
-
-        label_zeiteinheit_width = label_zeiteinheit.winfo_reqwidth() + 10
-
-        vorgangframe_base_width = label_beschreibung_width + 50 + 3
-        vorgangframe_base_height = label_beschreibung.winfo_reqheight()
-
-        if vorgangframe_base_width < label_zeiteinheit_width + 3 * 50 + 5:
-            vorgangframe_base_width = label_zeiteinheit_width + 3 * 50 + 5
-
-        self.width = vorgangframe_base_width
-        self.hoehe = vorgangframe_base_height * 4 + 3
-
-        frame_frueheste.config(width=vorgangframe_base_width, height=vorgangframe_base_height)
-        frame_schwarz_name.config(width=vorgangframe_base_width, height=vorgangframe_base_height + 2)
-        frame_schwarz_dauer_puffer.config(width=vorgangframe_base_width, height=vorgangframe_base_height + 1)
-        frame_spaeteste.config(width=vorgangframe_base_width, height=vorgangframe_base_height)
-        frame_faz.config(height=vorgangframe_base_height)
-        frame_fez.config(height=vorgangframe_base_height)
-        frame_index.config(height=vorgangframe_base_height)
-        frame_beschreibung.config(width=vorgangframe_base_width - 50 - 3, height=vorgangframe_base_height)
-        frame_dauer.config(height=vorgangframe_base_height)
-        frame_zeiteinheit.config(width=vorgangframe_base_width - 3 * 50 - 5, height=vorgangframe_base_height)
-        frame_gp.config(height=vorgangframe_base_height)
-        frame_fp.config(height=vorgangframe_base_height)
-        frame_saz.config(height=vorgangframe_base_height)
-        frame_sez.config(height=vorgangframe_base_height)
-
-        _vorgang.frame_breite = vorgangframe_base_width
-
-        self.update_idletasks()
-        self.pack_propagate(False)
+        # FP-Text:
+        text_fp_x1 = linie_horizontal_1_x2 - 1 - self.__vorgangs_spalten_breite / 2
+        text_fp_y1 = linie_horizontal_2_y1 + self.__vorgangs_zeilen_hoehe / 2
+        self.__canvas_netzplan.create_text(text_fp_x1, text_fp_y1, text=_vorgang.fp, font=self.__fonts.font_main)

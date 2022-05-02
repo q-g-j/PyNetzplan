@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
 
 # Diese Klasse stellt die Methode "berechne_vorgangsdaten()" für das Berechnen der
 # folgenden Vorgangsdaten zur Verfügung:
@@ -10,7 +8,6 @@ import sys
 class Berechnungen:
     def __init__(self, _vorgangsliste):
         self.__vorgangsliste = _vorgangsliste
-        sys.setrecursionlimit(999999999)
         self.__baum = list()
 
     def berechne_vorgangsdaten(self):
@@ -161,8 +158,8 @@ class Berechnungen:
             spalten_max += 1
             row = 0
             for vorgangsindex in sorted_dict[key]:
-                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_spalte = column
-                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_zeile = row
+                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_coords['spalte'] = column
+                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_coords['zeile'] = row
                 if zeilen_max <= row:
                     zeilen_max += 1
                 row += 1
