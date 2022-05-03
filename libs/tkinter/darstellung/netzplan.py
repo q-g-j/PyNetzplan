@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import tkinter as tk
-import io
-import math
+# import io
+# import math
 
 from libs.berechnungen import Berechnungen
 from libs.tkinter.tkcommon import TkCommon
 from libs.tkinter.fonts import Fonts
 from libs.tkinter.scrollingframe import ScrollingFrame
 from libs.vorgang import Vorgang
-from PIL import Image
+# from PIL import Image
 
 
 class Netzplan(tk.Toplevel):
@@ -63,7 +63,9 @@ class Netzplan(tk.Toplevel):
         self.__canvas_netzplan.pack(fill=tk.BOTH, expand=True)
 
         for vorgangsindex in range(len(self.__vorgangsliste)):
-            self.zeichne_vorgang(self.__vorgangsliste[vorgangsindex], False)
+            self.__zeichne_vorgang(self.__vorgangsliste[vorgangsindex], False)
+
+        self.__zeichne_linien()
 
         legende = Vorgang()
         legende.index = "Nr."
@@ -79,7 +81,7 @@ class Netzplan(tk.Toplevel):
         legende.grid_coords['spalte'] = 0
         legende.grid_coords['zeile'] = self.__zeilen
 
-        self.zeichne_vorgang(legende, True)
+        self.__zeichne_vorgang(legende, True)
 
         self.__zeilen += 1
 
@@ -106,28 +108,30 @@ class Netzplan(tk.Toplevel):
 
         self.update()
 
-        # ps = self.__canvas_netzplan.postscript(colormode='color', x=0, y=0, pagewidth=canvas_width * 20, pageheight=canvas_height * 20)
+        # ps = self.__canvas_netzplan.postscript(colormode='color', x=0, y=0,
+        # pagewidth=canvas_width * 20, pageheight=canvas_height * 20)
         #
-        # """ canvas postscripts seem to be saved at 0.60 scale, so we need to increase the default dpi (72) by 60 percent """
+        # canvas postscripts seem to be saved at 0.60 scale,
+        # so we need to increase the default dpi (72) by 60 percent
         # im = Netzplan.open_eps(ps, dpi=119.5)
         # im.save('out.eps', dpi=(119.5, 119.5))
         #
         # img = Image.open('out.eps')
         # img.save('out.png', 'png', quality=99)
 
-    @staticmethod
-    def open_eps(ps, dpi=300.0):
-        img = Image.open(io.BytesIO(ps.encode('utf-8')))
-        original = img.size
-        scale = dpi / 72.0
-        # if dpi != 0:
-        #     img.load()
-        if scale != 1:
-            new = (int(round(scale * original[0])), int(round(scale * original[1])))
-            img.thumbnail(new, Image.ANTIALIAS)
-        return img
+    # @staticmethod
+    # def __open_eps(ps, dpi=300.0):
+    #     img = Image.open(io.BytesIO(ps.encode('utf-8')))
+    #     original = img.size
+    #     scale = dpi / 72.0
+    #     # if dpi != 0:
+    #     #     img.load()
+    #     if scale != 1:
+    #         new = (int(round(scale * original[0])), int(round(scale * original[1])))
+    #         img.thumbnail(new, Image.ANTIALIAS)
+    #     return img
 
-    def zeichne_vorgang(self, _vorgang, _ist_legende):
+    def __zeichne_vorgang(self, _vorgang, _ist_legende):
         # weiß und grau ohne linke vertikale Linie
         vorgang_x1 = self.__offset_horizontal + _vorgang.grid_coords['spalte'] * (
                 self.__vorgangs_breite + self.___vorgangs_abstand_horizontal) + 1
@@ -320,3 +324,40 @@ class Netzplan(tk.Toplevel):
         text_fp_x1 = linie_horizontal_1_x2 - 1 - self.__vorgangs_spalten_breite / 2
         text_fp_y1 = linie_horizontal_2_y1 + self.__vorgangs_zeilen_hoehe / 2
         self.__canvas_netzplan.create_text(text_fp_x1, text_fp_y1, text=_vorgang.fp, font=self.__fonts.font_main)
+
+        _vorgang.linien_anker_links['x1'] = vorgang_x1 - 1
+        _vorgang.linien_anker_links['y1'] = vorgang_y1 - 3 + self.__vorgangs_hoehe / 2
+        _vorgang.linien_anker_rechts['x1'] = vorgang_x1 - 1 + self.__vorgangs_breite
+        _vorgang.linien_anker_rechts['y1'] = vorgang_y1 - 3 + self.__vorgangs_hoehe / 2
+        _vorgang.linien_anker_links['x1_versatz'] = _vorgang.linien_anker_links['x1'] \
+            - self.___vorgangs_abstand_horizontal / 4
+        _vorgang.linien_anker_rechts['x1_versatz'] = _vorgang.linien_anker_rechts['x1'] \
+            + self.___vorgangs_abstand_horizontal / 4
+
+    def __zeichne_linien(self):
+        for vorgangslistenindex in range(len(self.__vorgangsliste)):
+            vorgang = self.__vorgangsliste[vorgangslistenindex]
+            if len(vorgang.nachfolger_liste) != 0:
+                linie_rechts_x1 = vorgang.linien_anker_rechts['x1']
+                linie_rechts_y1 = vorgang.linien_anker_rechts['y1']
+                linie_rechts_x2 = vorgang.linien_anker_rechts['x1_versatz']
+                linie_rechts_y2 = vorgang.linien_anker_rechts['y1']
+                self.__canvas_netzplan.create_line(linie_rechts_x1, linie_rechts_y1, linie_rechts_x2, linie_rechts_y2,
+                                                   fill='red')
+            if len(vorgang.vorgaenger_liste) != 0:
+                linie_links_x1 = vorgang.linien_anker_links['x1_versatz']
+                linie_links_y1 = vorgang.linien_anker_links['y1']
+                linie_links_x2 = vorgang.linien_anker_links['x1']
+                linie_links_y2 = vorgang.linien_anker_links['y1']
+                self.__canvas_netzplan.create_line(linie_links_x1, linie_links_y1, linie_links_x2, linie_links_y2,
+                                                   fill='red')
+
+        for vorgangslistenindex in range(len(self.__vorgangsliste)):
+            vorgang = self.__vorgangsliste[vorgangslistenindex]
+            for nachfolger in vorgang.nachfolger_liste:
+                nachfolger_vorgang = self.__vorgangsliste[self.__berechnungen.konv_vorgangsindex_nach_listenindex(nachfolger)]
+                self.__canvas_netzplan.create_line(vorgang.linien_anker_rechts['x1_versatz'],
+                                                   vorgang.linien_anker_rechts['y1'],
+                                                   nachfolger_vorgang.linien_anker_links['x1_versatz'],
+                                                   nachfolger_vorgang.linien_anker_links['y1'],
+                                                   fill='red')

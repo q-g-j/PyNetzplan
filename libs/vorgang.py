@@ -16,13 +16,5 @@ class Vorgang:
         self.vorgaenger_liste = []
         self.nachfolger_liste = []
         self.grid_coords = {'spalte': -1, 'zeile': -1}
-        self.index_position = {'x1': -1, 'y1': - 1}
-        self.beschreibung_position = {'x1': -1, 'y1': - 1}
-        self.dauer_position = {'x1': -1, 'y1': - 1}
-        self.zeiteinheit_position = {'x1': -1, 'y1': - 1}
-        self.faz_position = {'x1': -1, 'y1': - 1}
-        self.fez_position = {'x1': -1, 'y1': - 1}
-        self.saz_position = {'x1': -1, 'y1': - 1}
-        self.sez_position = {'x1': -1, 'y1': - 1}
-        self.gp_position = {'x1': -1, 'y1': - 1}
-        self.fp_position = {'x1': -1, 'y1': - 1}
+        self.linien_anker_links = {'x1': -1, 'y1': - 1, 'x1_versatz': -1}
+        self.linien_anker_rechts = {'x1': -1, 'y1': - 1, 'x1_versatz': -1}

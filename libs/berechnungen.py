@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import math
+
 
 # Diese Klasse stellt die Methode "berechne_vorgangsdaten()" für das Berechnen der
 # folgenden Vorgangsdaten zur Verfügung:
@@ -158,8 +160,15 @@ class Berechnungen:
             spalten_max += 1
             row = 0
             for vorgangsindex in sorted_dict[key]:
-                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_coords['spalte'] = column
-                _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)].grid_coords['zeile'] = row
+                vorgang = _vorgangsliste[self.konv_vorgangsindex_nach_listenindex(vorgangsindex)]
+                vorgang.grid_coords['spalte'] = column
+                if self.konv_vorgangsindex_nach_listenindex(vorgangsindex) == 0:
+                    if len(vorgang.nachfolger_liste) > 1:
+                        vorgang.grid_coords['zeile'] = int(math.floor((len(vorgang.nachfolger_liste) - 1) / 2))
+                    else:
+                        vorgang.grid_coords['zeile'] = row
+                else:
+                    vorgang.grid_coords['zeile'] = row
                 if zeilen_max <= row:
                     zeilen_max += 1
                 row += 1
