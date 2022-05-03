@@ -29,7 +29,7 @@ class Netzplan(tk.Toplevel):
         self.__vorgangs_hoehe = self.__vorgangs_zeilen_hoehe * 4 + 5
 
         self.___vorgangs_abstand_horizontal = 80
-        self.___vorgangs_abstand_vertikal = 50
+        self.___vorgangs_abstand_vertikal = 30
 
         self.__offset_vertikal = 50
         self.__offset_horizontal = 50

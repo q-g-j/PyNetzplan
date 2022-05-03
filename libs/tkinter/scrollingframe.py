@@ -33,12 +33,12 @@ class ScrollingFrame(tk.Frame):
         self.scrollbar_y_width = self.__scrollbar_y.winfo_reqwidth()
 
     # self.update() nach jedem Scrollen, um Schlieren zu vermeiden
-    def __scroll_x_action(self, _first, _second):
-        self.canvas.xview(_first, _second)
+    def __scroll_x_action(self, *args):
+        self.canvas.xview(*args)
         self.update()
 
-    def __scroll_y_action(self, _first, _second):
-        self.canvas.yview(_first, _second)
+    def __scroll_y_action(self, *args):
+        self.canvas.yview(*args)
         self.update()
 
     def __on_frame_configure(self, _event):
